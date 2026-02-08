@@ -1,151 +1,129 @@
-class c {
+var m = (n) => {
+  throw TypeError(n);
+};
+var g = (n, e, s) => e.has(n) || m("Cannot " + s);
+var f = (n, e, s) => e.has(n) ? m("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(n) : e.set(n, s);
+var o = (n, e, s) => (g(n, e, "access private method"), s);
+var t, v, M, C, E, y, L, D;
+class H {
   constructor(e) {
-    this.cursorEl = e, this._entries = [];
+    f(this, t);
+    var { element: s, hideTrueCursor: i, focusElements: a, focusClass: h, hiddenClass: u, clickingClass: r, lerp: l } = e;
+    if (this.DOM = {
+      element: typeof s == "string" ? document.querySelector(s) : s,
+      styleTag: null
+    }, !this.DOM.element) throw new Error("CustomCursor: no valid element provided");
+    this.hideTrueCursor = i ?? !1, this.focusElements = a ?? ["a", "button"], this.focusClass = h ?? "c--cursor-a--is-active", this.hiddenClass = u ?? "c--cursor-a--is-hidden", this.clickingClass = r ?? "c--cursor-a--second", this.lerp = l ?? 1, this.initialized = !1, this.disabled = !1, this.position = { x: null, y: null }, this.current = { x: 0, y: 0 }, this.rafId = null, this.focusEntries = [], this.onMouseMoveHandler = o(this, t, v).bind(this), this.onMouseEnterHandler = o(this, t, M).bind(this), this.onMouseLeaveHandler = o(this, t, C).bind(this), this.onMouseDownHandler = o(this, t, E).bind(this), this.init(), this.events();
   }
   /**
-   * Register focus elements.
-   * @param {Array} focusOpts — array of strings (selectors) or objects:
-   *   string  → selector, uses default focusClass
-   *   object  → { elements: string|NodeList|Array, focusClass?, mouseenter?, mouseleave? }
-   * @param {string} defaultFocusClass — fallback class when only a selector string is provided
+   * Initializes the cursor, hides native cursor, registers default
+   * focus elements and starts the rAF render loop.
+   */
+  init() {
+    if (this.initialized || o(this, t, D).call(this)) return;
+    this.DOM.element.classList.add("cursor--initialized"), this.hideTrueCursor && o(this, t, y).call(this), this.addFocusElements(this.focusElements);
+    const e = () => {
+      !this.disabled && this.position.x !== null && (this.lerp >= 1 ? (this.current.x = this.position.x, this.current.y = this.position.y) : (this.current.x += (this.position.x - this.current.x) * this.lerp, this.current.y += (this.position.y - this.current.y) * this.lerp), this.DOM.element.style.transform = `translate3d(${this.current.x}px, ${this.current.y}px, 0)`), this.rafId = requestAnimationFrame(e);
+    };
+    this.rafId = requestAnimationFrame(e), this.initialized = !0;
+  }
+  /**
+   * Sets up document-level event listeners for mouse tracking,
+   * enter/leave detection and click state.
+   */
+  events() {
+    document.addEventListener("mousemove", this.onMouseMoveHandler), document.addEventListener("mouseenter", this.onMouseEnterHandler), document.addEventListener("mouseleave", this.onMouseLeaveHandler), document.addEventListener("mousedown", this.onMouseDownHandler);
+  }
+  /**
+   * Register focus elements dynamically.
+   * @param {Array|string|Object} focusOpts - Selector string, array of selectors, or object with { elements, focusClass?, mouseenter?, mouseleave? }
    * @returns {this}
    */
-  addFocusElements(e, s = "cursor--focused") {
-    return Array.isArray(e) || (e = [e]), e.forEach((t) => {
-      let o, n, r, l;
-      if (typeof t == "string")
-        o = document.querySelectorAll(t), n = s;
+  addFocusElements(e) {
+    return Array.isArray(e) || (e = [e]), e.forEach((s) => {
+      var i, a, h, u;
+      if (typeof s == "string")
+        i = document.querySelectorAll(s), a = this.focusClass;
       else {
-        const i = t.elements;
-        typeof i == "string" ? o = document.querySelectorAll(i) : i instanceof NodeList || Array.isArray(i) ? o = i : o = [i], n = t.focusClass || s, r = t.mouseenter, l = t.mouseleave;
+        var r = s.elements;
+        typeof r == "string" ? i = document.querySelectorAll(r) : r instanceof NodeList || Array.isArray(r) ? i = r : i = [r], a = s.focusClass || this.focusClass, h = s.mouseenter, u = s.mouseleave;
       }
-      Array.from(o).forEach((i) => {
-        const u = () => {
-          this.cursorEl.classList.add(n), typeof r == "function" && r(this.cursorEl, i);
-        }, h = () => {
-          this.cursorEl.classList.remove(n), typeof l == "function" && l(this.cursorEl, i);
+      Array.from(i).forEach((l) => {
+        var d = () => {
+          this.DOM.element.classList.add(a), typeof h == "function" && h(this.DOM.element, l);
+        }, c = () => {
+          this.DOM.element.classList.remove(a), typeof u == "function" && u(this.DOM.element, l);
         };
-        i.addEventListener("mouseenter", u), i.addEventListener("mouseleave", h), this._entries.push({ el: i, enterFunc: u, leaveFunc: h });
+        l.addEventListener("mouseenter", d), l.addEventListener("mouseleave", c), this.focusEntries.push({ el: l, enterHandler: d, leaveHandler: c });
       });
     }), this;
   }
   /**
-   * Remove listeners for specific elements.
+   * Remove focus listeners for specific elements.
    * @param {string|NodeList|Array|Element} elements
    * @returns {this}
    */
   removeFocusElements(e) {
     typeof e == "string" ? e = document.querySelectorAll(e) : !(e instanceof NodeList) && !Array.isArray(e) && (e = [e]);
-    const s = new Set(Array.from(e));
-    return this._entries = this._entries.filter((t) => s.has(t.el) ? (t.el.removeEventListener("mouseenter", t.enterFunc), t.el.removeEventListener("mouseleave", t.leaveFunc), !1) : !0), this;
-  }
-  /**
-   * Remove all focus listeners.
-   * @returns {this}
-   */
-  destroy() {
-    return this._entries.forEach((e) => {
-      e.el.removeEventListener("mouseenter", e.enterFunc), e.el.removeEventListener("mouseleave", e.leaveFunc);
-    }), this._entries = [], this;
-  }
-}
-class d {
-  constructor(e, s = {}) {
-    if (this.element = typeof e == "string" ? document.querySelector(e) : e, !this.element) throw new Error("CustomCursor: no valid element provided");
-    this.options = {
-      hideTrueCursor: s.hideTrueCursor ?? !1,
-      focusElements: s.focusElements ?? ["a", "button"],
-      focusClass: s.focusClass ?? "c--cursor-a--is-active",
-      hiddenClass: s.hiddenClass ?? "c--cursor-a--is-hidden",
-      clickingClass: s.clickingClass ?? "cursor--clicking",
-      lerp: s.lerp ?? 1
-    }, this.initialized = !1, this.disabled = !1, this.position = { x: null, y: null }, this._current = { x: 0, y: 0 }, this.styleTag = null, this._rafId = null, this._focusController = null, this._onMouseMove = this._onMouseMove.bind(this), this._onMouseEnter = this._onMouseEnter.bind(this), this._onMouseLeave = this._onMouseLeave.bind(this), this._onMouseDown = this._onMouseDown.bind(this);
-  }
-  /**
-   * Initialize the custom cursor.
-   * @returns {this}
-   */
-  initialize() {
-    if (this.initialized || this._isMobile()) return this;
-    this.element.classList.add("cursor--initialized"), this.options.hideTrueCursor && this._hideTrueCursor(), document.addEventListener("mousemove", this._onMouseMove), document.addEventListener("mouseenter", this._onMouseEnter), document.addEventListener("mouseleave", this._onMouseLeave), document.addEventListener("mousedown", this._onMouseDown), this._focusController = new c(this.element), this._focusController.addFocusElements(this.options.focusElements, this.options.focusClass);
-    const e = () => {
-      !this.disabled && this.position.x !== null && (this.options.lerp >= 1 ? (this._current.x = this.position.x, this._current.y = this.position.y) : (this._current.x += (this.position.x - this._current.x) * this.options.lerp, this._current.y += (this.position.y - this._current.y) * this.options.lerp), this._setPosition(this._current.x, this._current.y)), this._rafId = requestAnimationFrame(e);
-    };
-    return this._rafId = requestAnimationFrame(e), this.initialized = !0, this;
-  }
-  /**
-   * Destroy the cursor instance and clean up all resources.
-   * @returns {this}
-   */
-  destroy() {
-    return this.initialized ? (this._rafId !== null && (cancelAnimationFrame(this._rafId), this._rafId = null), this.element.classList.remove("cursor--initialized", this.options.hiddenClass), this._unhideTrueCursor(), document.removeEventListener("mousemove", this._onMouseMove), document.removeEventListener("mouseenter", this._onMouseEnter), document.removeEventListener("mouseleave", this._onMouseLeave), document.removeEventListener("mousedown", this._onMouseDown), this._focusController && (this._focusController.destroy(), this._focusController = null), this.initialized = !1, this) : this;
+    var s = new Set(Array.from(e));
+    return this.focusEntries = this.focusEntries.filter((i) => s.has(i.el) ? (i.el.removeEventListener("mouseenter", i.enterHandler), i.el.removeEventListener("mouseleave", i.leaveHandler), !1) : !0), this;
   }
   /**
    * Update options and re-initialize.
-   * @param {Object} newOptions
+   * @param {Object} newOptions - Partial payload with options to override
    * @returns {this}
    */
   update(e) {
-    return this.destroy(), Object.assign(this.options, e), this.initialize(), this;
-  }
-  /**
-   * Add focus elements (proxy to FocusController).
-   * @param {Array|string|Object} focusOpts
-   * @returns {this}
-   */
-  addFocusElements(e) {
-    return this._focusController && this._focusController.addFocusElements(e, this.options.focusClass), this;
-  }
-  /**
-   * Remove focus elements (proxy to FocusController).
-   * @param {string|NodeList|Array|Element} elements
-   * @returns {this}
-   */
-  removeFocusElements(e) {
-    return this._focusController && this._focusController.removeFocusElements(e), this;
+    return this.destroy(), Object.assign(this, {
+      hideTrueCursor: e.hideTrueCursor ?? this.hideTrueCursor,
+      focusElements: e.focusElements ?? this.focusElements,
+      focusClass: e.focusClass ?? this.focusClass,
+      hiddenClass: e.hiddenClass ?? this.hiddenClass,
+      clickingClass: e.clickingClass ?? this.clickingClass,
+      lerp: e.lerp ?? this.lerp
+    }), this.init(), this.events(), this;
   }
   /**
    * Disable the cursor.
    * @returns {this}
    */
   disable() {
-    return this.initialized ? (this.disabled = !0, this.element.classList.add(this.options.hiddenClass), this) : this;
+    return this.initialized ? (this.disabled = !0, this.DOM.element.classList.add(this.hiddenClass), this) : this;
   }
   /**
    * Enable the cursor.
    * @returns {this}
    */
   enable() {
-    return this.initialized ? (this.disabled = !1, this.element.classList.remove(this.options.hiddenClass), this) : this;
+    return this.initialized ? (this.disabled = !1, this.DOM.element.classList.remove(this.hiddenClass), this) : this;
   }
-  // ─── Private ───────────────────────────────────────────
-  _onMouseMove(e) {
-    this.position.x = e.clientX, this.position.y = e.clientY;
-  }
-  _setPosition(e, s) {
-    typeof e == "number" && typeof s == "number" && (this.element.style.transform = `translate3d(${e}px, ${s}px, 0)`);
-  }
-  _onMouseEnter() {
-    this.element.classList.remove(this.options.hiddenClass);
-  }
-  _onMouseLeave() {
-    this.element.classList.add(this.options.hiddenClass);
-  }
-  _onMouseDown() {
-    this.element.classList.add(this.options.clickingClass), document.addEventListener("mouseup", () => {
-      this.element.classList.remove(this.options.clickingClass);
-    }, { once: !0 });
-  }
-  _hideTrueCursor() {
-    this.styleTag || (this.styleTag = document.createElement("style"), this.styleTag.textContent = "* { cursor: none !important; }", document.head.appendChild(this.styleTag));
-  }
-  _unhideTrueCursor() {
-    this.styleTag && (this.styleTag.remove(), this.styleTag = null);
-  }
-  _isMobile() {
-    return /Mobi|Android/i.test(navigator.userAgent);
+  /**
+   * Removes all event listeners, cancels rAF, and clears all references.
+   */
+  destroy() {
+    this.initialized && (this.rafId !== null && (cancelAnimationFrame(this.rafId), this.rafId = null), this.DOM.element.classList.remove("cursor--initialized", this.hiddenClass), o(this, t, L).call(this), document.removeEventListener("mousemove", this.onMouseMoveHandler), document.removeEventListener("mouseenter", this.onMouseEnterHandler), document.removeEventListener("mouseleave", this.onMouseLeaveHandler), document.removeEventListener("mousedown", this.onMouseDownHandler), this.focusEntries.forEach((e) => {
+      e.el.removeEventListener("mouseenter", e.enterHandler), e.el.removeEventListener("mouseleave", e.leaveHandler);
+    }), this.focusEntries = [], this.initialized = !1);
   }
 }
+t = new WeakSet(), // ─── Private ───────────────────────────────────────────
+v = function(e) {
+  this.position.x = e.clientX, this.position.y = e.clientY;
+}, M = function() {
+  this.DOM.element.classList.remove(this.hiddenClass);
+}, C = function() {
+  this.DOM.element.classList.add(this.hiddenClass);
+}, E = function() {
+  this.DOM.element.classList.add(this.clickingClass), document.addEventListener("mouseup", () => {
+    this.DOM.element.classList.remove(this.clickingClass);
+  }, { once: !0 });
+}, y = function() {
+  this.DOM.styleTag || (this.DOM.styleTag = document.createElement("style"), this.DOM.styleTag.textContent = "* { cursor: none !important; }", document.head.appendChild(this.DOM.styleTag));
+}, L = function() {
+  this.DOM.styleTag && (this.DOM.styleTag.remove(), this.DOM.styleTag = null);
+}, D = function() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+};
 export {
-  d as default
+  H as default
 };

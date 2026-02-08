@@ -3,7 +3,7 @@ import { resolve } from 'path';
 
 const root = resolve(__dirname, 'src');
 const outDir = resolve(__dirname, 'dist');
-const entryPath = resolve(__dirname, 'src/js/CustomCursor.js');
+const entryPath = resolve(__dirname, 'src/js/core/CustomCursor.js');
 
 export default defineConfig({
     root,

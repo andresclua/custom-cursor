@@ -79,7 +79,8 @@
 }</code></pre></div>
           <div class="code-tabs__panel" id="setup-js"><pre><code>import CustomCursor from '@andresclua/custom-cursor';
 
-const dot = new CustomCursor('.c--cursor-a', {
+const dot = new CustomCursor({
+  element: '.c--cursor-a',
   hideTrueCursor: true,
   focusElements: ['a', 'button'],
   focusClass: 'c--cursor-a--is-active',
@@ -88,7 +89,8 @@ const dot = new CustomCursor('.c--cursor-a', {
   lerp: 1,
 });
 
-const ring = new CustomCursor('.c--cursor-b', {
+const ring = new CustomCursor({
+  element: '.c--cursor-b',
   focusElements: ['a', 'button'],
   focusClass: 'c--cursor-b--is-active',
   hiddenClass: 'c--cursor-b--is-hidden',
@@ -96,8 +98,7 @@ const ring = new CustomCursor('.c--cursor-b', {
   lerp: 0.15,
 });
 
-dot.initialize();
-ring.initialize();</code></pre></div>
+// init() and events() run automatically in the constructor</code></pre></div>
         </div>
       </section>
 
@@ -130,12 +131,14 @@ ring.initialize();</code></pre></div>
   &--is-active { border-color: #e74c3c; }
 }</code></pre></div>
           <div class="code-tabs__panel" id="e1-js"><pre><code>// Already handled by focusElements in the constructor:
-const dot = new CustomCursor('.c--cursor-a', {
+const dot = new CustomCursor({
+  element: '.c--cursor-a',
   focusElements: ['a', 'button'],
   focusClass: 'c--cursor-a--is-active',
 });
 
-const ring = new CustomCursor('.c--cursor-b', {
+const ring = new CustomCursor({
+  element: '.c--cursor-b',
   focusElements: ['a', 'button'],
   focusClass: 'c--cursor-b--is-active',
 });</code></pre></div>
@@ -404,7 +407,8 @@ loadMoreBtn.addEventListener('click', () => {
           <div class="code-tabs__panel code-tabs__panel--active" id="e6-html"><pre><code>&lt;span class="js--focus"&gt;Focusable Span&lt;/span&gt;
 &lt;div class="js--focus"&gt;Focusable Div&lt;/div&gt;</code></pre></div>
           <div class="code-tabs__panel" id="e6-js"><pre><code>// Pass '.js--focus' in the constructor focusElements array:
-const dot = new CustomCursor('.c--cursor-a', {
+const dot = new CustomCursor({
+  element: '.c--cursor-a',
   focusElements: ['a', 'button', '.js--focus'],
   focusClass: 'c--cursor-a--is-active',
 });</code></pre></div>

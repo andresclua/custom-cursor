@@ -1,7 +1,8 @@
-import CustomCursor from './CustomCursor';
+import CustomCursor from './core/CustomCursor';
 
 // ─── Dot (inner circle, instant follow) ─────────────────
-const dot = new CustomCursor('.c--cursor-a', {
+const dot = new CustomCursor({
+	element: '.c--cursor-a',
 	hideTrueCursor: true,
 	focusElements: ['a', 'button', '.js--focus'],
 	focusClass: 'c--cursor-a--is-active',
@@ -10,18 +11,15 @@ const dot = new CustomCursor('.c--cursor-a', {
 	lerp: 1,
 });
 
-dot.initialize();
-
 // ─── Ring (outer circle, smooth follow) ─────────────────
-const ring = new CustomCursor('.c--cursor-b', {
+const ring = new CustomCursor({
+	element: '.c--cursor-b',
 	focusElements: ['a', 'button', '.js--focus'],
 	focusClass: 'c--cursor-b--is-active',
 	hiddenClass: 'c--cursor-b--is-hidden',
 	clickingClass: 'c--cursor-b--second',
 	lerp: 0.15,
 });
-
-ring.initialize();
 
 // ─── 2. Grow cards ──────────────────────────────────────
 dot.addFocusElements({ elements: '.js--grow', focusClass: 'c--cursor-a--third' });
@@ -73,7 +71,6 @@ loadMoreBtn.addEventListener('click', () => {
 		newCards.push(card);
 	}
 
-	// Key step: register the NEW DOM nodes with the cursor
 	dot.addFocusElements({ elements: newCards, focusClass: 'c--cursor-a--fourth' });
 	ring.addFocusElements({
 		elements: newCards,
@@ -109,13 +106,13 @@ let isLarge = false;
 updateBtn.addEventListener('click', () => {
 	isLarge = !isLarge;
 	if (isLarge) {
-		dot.update({ focusClass: 'c--cursor-a--third', hiddenClass: 'c--cursor-a--is-hidden', clickingClass: 'c--cursor-a--second' });
-		ring.update({ focusClass: 'c--cursor-b--third', hiddenClass: 'c--cursor-b--is-hidden', clickingClass: 'c--cursor-b--second', lerp: 0.15 });
+		dot.update({ focusClass: 'c--cursor-a--third' });
+		ring.update({ focusClass: 'c--cursor-b--third' });
 		updateBtn.textContent = 'Revert Cursor';
 		updateBtn.classList.add('c--btn-a--is-active');
 	} else {
-		dot.update({ focusClass: 'c--cursor-a--is-active', hiddenClass: 'c--cursor-a--is-hidden', clickingClass: 'c--cursor-a--second' });
-		ring.update({ focusClass: 'c--cursor-b--is-active', hiddenClass: 'c--cursor-b--is-hidden', clickingClass: 'c--cursor-b--second', lerp: 0.15 });
+		dot.update({ focusClass: 'c--cursor-a--is-active' });
+		ring.update({ focusClass: 'c--cursor-b--is-active' });
 		updateBtn.textContent = 'Toggle Large Cursor';
 		updateBtn.classList.remove('c--btn-a--is-active');
 	}
