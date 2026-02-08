@@ -1,0 +1,37 @@
+{
+    "name": "@andresclua/custom-cursor",
+    "private": false,
+    "version": "1.0.0",
+    "description": "A lightweight JavaScript library for creating customizable animated cursors",
+    "type": "module",
+    "main": "./dist/CustomCursor.umd.js",
+    "module": "./dist/CustomCursor.es.js",
+    "exports": {
+        ".": {
+            "import": "./dist/CustomCursor.es.js",
+            "require": "./dist/CustomCursor.umd.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "keywords": [
+        "cursor",
+        "custom-cursor",
+        "mouse",
+        "pointer",
+        "animation",
+        "dom",
+        "javascript",
+        "ui"
+    ],
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "devDependencies": {
+        "sass": "^1.80.6",
+        "vite": "^5.4.10"
+    }
+}

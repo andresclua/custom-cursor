@@ -1,0 +1,279 @@
+/* ─── c--cursor-a (dot / inner) ─────────────────────── */
+
+.c--cursor-a {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 8px;
+	height: 8px;
+	background: #111;
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 10000;
+	transform: translate3d(0, 0, 0);
+	margin-left: -4px;
+	margin-top: -4px;
+	transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, background-color 0.2s ease, opacity 0.15s ease;
+
+	&--is-hidden {
+		opacity: 0;
+	}
+
+	&--is-active {
+		background-color: #e74c3c;
+	}
+
+	/* clicking */
+	&--second {
+		width: 6px;
+		height: 6px;
+		margin-left: -3px;
+		margin-top: -3px;
+	}
+
+	/* grow: dot hides */
+	&--third {
+		opacity: 0;
+	}
+
+	/* text-mode: dot hides */
+	&--fourth {
+		opacity: 0;
+	}
+}
+
+/* ─── c--cursor-b (ring / outer) ────────────────────── */
+
+.c--cursor-b {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 40px;
+	height: 40px;
+	border: 1.5px solid #111;
+	background: transparent;
+	border-radius: 50%;
+	pointer-events: none;
+	z-index: 9999;
+	transform: translate3d(0, 0, 0);
+	margin-left: -20px;
+	margin-top: -20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	color: #fff;
+	font-size: 11px;
+	white-space: nowrap;
+	transition: width 0.3s ease, height 0.3s ease, margin 0.3s ease, border-color 0.3s ease, opacity 0.2s ease, background-color 0.3s ease;
+
+	&--is-hidden {
+		opacity: 0;
+	}
+
+	&--is-active {
+		border-color: #e74c3c;
+	}
+
+	/* clicking */
+	&--second {
+		width: 30px;
+		height: 30px;
+		margin-left: -15px;
+		margin-top: -15px;
+	}
+
+	/* grow: ring expands */
+	&--third {
+		width: 60px;
+		height: 60px;
+		margin-left: -30px;
+		margin-top: -30px;
+		border-color: rgba(52, 152, 219, 0.6);
+		background-color: rgba(52, 152, 219, 0.1);
+	}
+
+	/* text-mode: ring becomes filled with text */
+	&--fourth {
+		width: 80px;
+		height: 80px;
+		margin-left: -40px;
+		margin-top: -40px;
+		border-color: transparent;
+		background-color: rgba(0, 0, 0, 0.85);
+	}
+}
+
+/* ─── c--card-a ─────────────────────────────────────── */
+
+.c--card-a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 120px;
+	padding: 24px;
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	text-decoration: none;
+	color: #333;
+	flex: 1;
+	min-width: 200px;
+	transition: box-shadow 0.2s ease;
+
+	&:hover {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+	}
+}
+
+/* ─── Demo Page ─────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	margin: 0;
+	padding: 0;
+	background: #fafafa;
+	color: #333;
+}
+
+.demo {
+	max-width: 960px;
+	margin: 0 auto;
+	padding: 40px 20px 80px;
+
+	&__title {
+		font-size: 2rem;
+		margin-bottom: 0.25em;
+	}
+
+	&__subtitle {
+		color: #888;
+		margin-bottom: 2em;
+	}
+}
+
+.example {
+	margin-bottom: 48px;
+
+	&__heading {
+		font-size: 1.1rem;
+		margin-bottom: 4px;
+	}
+
+	&__desc {
+		font-size: 0.85rem;
+		color: #888;
+		margin-bottom: 12px;
+	}
+
+	&__row {
+		display: flex;
+		gap: 12px;
+		flex-wrap: wrap;
+		align-items: flex-start;
+	}
+}
+
+/* ─── c--btn-a ──────────────────────────────────────── */
+
+.c--btn-a {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 10px 20px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	background: #fff;
+	cursor: pointer;
+	font-size: 0.9rem;
+	transition: background 0.15s ease;
+
+	&:hover {
+		background: #f0f0f0;
+	}
+
+	&--is-active {
+		background: #111;
+		color: #fff;
+		border-color: #111;
+
+		&:hover {
+			background: #333;
+		}
+	}
+}
+
+/* Generic focus element */
+.js--focus {
+	display: inline-block;
+	padding: 12px 24px;
+	border: 2px dashed #bbb;
+	border-radius: 8px;
+	color: #888;
+	font-size: 0.85rem;
+}
+
+/* ─── Code Tabs ─────────────────────────────────────── */
+
+.code-tabs {
+	margin-top: 16px;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #1e1e1e;
+
+	&__nav {
+		display: flex;
+		background: #2d2d2d;
+		border-bottom: 1px solid #3a3a3a;
+	}
+
+	&__btn {
+		padding: 8px 16px;
+		border: none;
+		background: none;
+		color: #888;
+		font-size: 0.8rem;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+		cursor: pointer;
+		border-bottom: 2px solid transparent;
+		transition: color 0.15s ease, border-color 0.15s ease;
+
+		&:hover {
+			color: #ccc;
+		}
+
+		&--active {
+			color: #fff;
+			border-bottom-color: #e74c3c;
+		}
+	}
+
+	&__panel {
+		display: none;
+
+		&--active {
+			display: block;
+		}
+
+		pre {
+			margin: 0;
+			padding: 16px 20px;
+			overflow-x: auto;
+		}
+
+		code {
+			font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+			font-size: 0.8rem;
+			line-height: 1.6;
+			color: #d4d4d4;
+			white-space: pre;
+		}
+	}
+}
