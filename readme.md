@@ -13,113 +13,118 @@ npm install @andresclua/custom-cursor
 ### Single cursor
 
 ```html
-<div class="custom-cursor"></div>
+<div class="c--cursor-a"></div>
 ```
 
 ```js
 import CustomCursor from '@andresclua/custom-cursor';
 
-const cursor = new CustomCursor('.custom-cursor', {
+new CustomCursor({
+  element: '.c--cursor-a',
   hideTrueCursor: true,
   focusElements: ['a', 'button'],
-  focusClass: 'cursor--focused',
+  focusClass: 'c--cursor-a--is-active',
+  hiddenClass: 'c--cursor-a--is-hidden',
+  clickingClass: 'c--cursor-a--second',
 });
-
-cursor.initialize();
 ```
 
 ### Dot + Ring (dual cursor)
 
-Use two elements and two instances — the dot follows instantly, the ring follows with a smooth delay via `lerp`:
+Two elements, two instances — the dot follows instantly, the ring follows with smooth delay via `lerp`:
 
 ```html
-<div class="custom-cursor custom-cursor--dot"></div>
-<div class="custom-cursor custom-cursor--ring"></div>
+<div class="c--cursor-a"></div>
+<div class="c--cursor-b"></div>
 ```
 
 ```js
 import CustomCursor from '@andresclua/custom-cursor';
 
-// Dot — instant follow
-const dot = new CustomCursor('.custom-cursor--dot', {
+const dot = new CustomCursor({
+  element: '.c--cursor-a',
   hideTrueCursor: true,
   focusElements: ['a', 'button'],
-  focusClass: 'cursor--focused',
+  focusClass: 'c--cursor-a--is-active',
+  hiddenClass: 'c--cursor-a--is-hidden',
+  clickingClass: 'c--cursor-a--second',
   lerp: 1,
 });
 
-// Ring — smooth delayed follow
-const ring = new CustomCursor('.custom-cursor--ring', {
+const ring = new CustomCursor({
+  element: '.c--cursor-b',
   focusElements: ['a', 'button'],
-  focusClass: 'cursor--focused',
+  focusClass: 'c--cursor-b--is-active',
+  hiddenClass: 'c--cursor-b--is-hidden',
+  clickingClass: 'c--cursor-b--second',
   lerp: 0.15,
 });
-
-dot.initialize();
-ring.initialize();
 ```
 
-```css
-.custom-cursor {
+```scss
+.c--cursor-a {
   position: fixed;
   top: 0;
   left: 0;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.custom-cursor--dot {
   width: 8px;
   height: 8px;
   background: #111;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
   margin-left: -4px;
   margin-top: -4px;
-  z-index: 10000;
-  transition: background-color 0.2s ease, opacity 0.15s ease;
+  transition: width 0.2s ease, height 0.2s ease,
+              margin 0.2s ease, background-color 0.2s ease,
+              opacity 0.15s ease;
+
+  &--is-hidden { opacity: 0; }
+  &--is-active { background-color: #e74c3c; }
+  &--second { width: 6px; height: 6px; margin-left: -3px; margin-top: -3px; }
 }
 
-.custom-cursor--ring {
+.c--cursor-b {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 40px;
   height: 40px;
   border: 1.5px solid #111;
   background: transparent;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
   margin-left: -20px;
   margin-top: -20px;
-  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #fff;
+  font-size: 11px;
+  transition: width 0.3s ease, height 0.3s ease,
+              margin 0.3s ease, border-color 0.3s ease,
+              opacity 0.2s ease, background-color 0.3s ease;
+
+  &--is-hidden { opacity: 0; }
+  &--is-active { border-color: #e74c3c; }
+  &--second { width: 30px; height: 30px; margin-left: -15px; margin-top: -15px; }
 }
 ```
 
-## Options
+## Payload Options
 
-| Option           | Type     | Default              | Description                        |
-| ---------------- | -------- | -------------------- | ---------------------------------- |
-| `hideTrueCursor` | boolean  | `false`              | Hide the native cursor             |
-| `focusElements`  | string[] | `['a', 'button']`    | Selectors for default focus hover  |
-| `focusClass`     | string   | `'cursor--focused'`  | Class added on focus-element hover |
-| `lerp`           | number   | `1`                  | Interpolation speed (0–1). `1` = instant, lower = smoother delay |
+| Option           | Type     | Default                    | Description                                                   |
+| ---------------- | -------- | -------------------------- | ------------------------------------------------------------- |
+| `element`        | string / HTMLElement | — (required)     | The cursor DOM element or selector                            |
+| `hideTrueCursor` | boolean  | `false`                    | Hide the native cursor                                        |
+| `focusElements`  | string[] | `['a', 'button']`          | Selectors for default focus hover                             |
+| `focusClass`     | string   | `'c--cursor-a--is-active'` | Class added on focus-element hover                            |
+| `hiddenClass`    | string   | `'c--cursor-a--is-hidden'` | Class added when cursor is hidden or off-screen               |
+| `clickingClass`  | string   | `'c--cursor-a--second'`    | Class added during mousedown                                  |
+| `lerp`           | number   | `1`                        | Interpolation speed (0–1). `1` = instant, lower = smoother delay |
 
 ## API
-
-### `cursor.initialize()`
-
-Initialize the cursor. Skips on mobile.
-
-### `cursor.destroy()`
-
-Remove all event listeners, cancel the animation frame, and clean up.
-
-### `cursor.disable()` / `cursor.enable()`
-
-Toggle cursor visibility.
-
-### `cursor.update(newOptions)`
-
-Update options and re-initialize. Accepts partial options object.
-
-```js
-cursor.update({ focusClass: 'cursor--grow' });
-```
 
 ### `cursor.addFocusElements(focusOpts)`
 
@@ -127,20 +132,18 @@ Add focus elements dynamically. Accepts a selector string, an array of selectors
 
 ```js
 // Simple selector
-cursor.addFocusElements('.my-cards');
+cursor.addFocusElements('.js--focus');
 
 // Object with custom class
-cursor.addFocusElements({
-  elements: '.js--grow',
-  focusClass: 'cursor--grow',
-});
+dot.addFocusElements({ elements: '.js--grow', focusClass: 'c--cursor-a--third' });
+ring.addFocusElements({ elements: '.js--grow', focusClass: 'c--cursor-b--third' });
 
 // Object with callbacks
-cursor.addFocusElements({
+ring.addFocusElements({
   elements: '.js--text',
-  focusClass: 'cursor--text-mode',
-  mouseenter(cursorEl) {
-    cursorEl.textContent = 'View';
+  focusClass: 'c--cursor-b--fourth',
+  mouseenter(cursorEl, el) {
+    cursorEl.textContent = el.dataset.cursorText || 'View';
   },
   mouseleave(cursorEl) {
     cursorEl.textContent = '';
@@ -156,10 +159,50 @@ Remove focus listeners from specific elements. Accepts a selector string, NodeLi
 cursor.removeFocusElements('.js--grow');
 ```
 
-All methods return `this` for chaining:
+### `cursor.disable()` / `cursor.enable()`
+
+Toggle cursor visibility.
+
+### `cursor.update(newOptions)`
+
+Update options and re-initialize. Accepts partial payload.
 
 ```js
-cursor.initialize().addFocusElements('.cards').disable();
+dot.update({ focusClass: 'c--cursor-a--third' });
+ring.update({ focusClass: 'c--cursor-b--third' });
+```
+
+### `cursor.destroy()`
+
+Remove all event listeners, cancel the animation frame, and clean up all references.
+
+### Dynamic content (AJAX / Load More)
+
+When new HTML is injected into the DOM, call `addFocusElements()` on the **new nodes** after they are added:
+
+```js
+const newCards = [];
+
+for (let i = 0; i < 2; i++) {
+  const card = document.createElement('div');
+  card.className = 'c--card-a js--dynamic';
+  card.dataset.cursorText = 'View';
+  grid.appendChild(card);
+  newCards.push(card);
+}
+
+// Register the NEW DOM nodes (not a selector, to avoid re-registering existing ones)
+dot.addFocusElements({ elements: newCards, focusClass: 'c--cursor-a--fourth' });
+ring.addFocusElements({
+  elements: newCards,
+  focusClass: 'c--cursor-b--fourth',
+  mouseenter(cursorEl, el) {
+    cursorEl.textContent = el.dataset.cursorText || 'View';
+  },
+  mouseleave(cursorEl) {
+    cursorEl.textContent = '';
+  },
+});
 ```
 
 ## Usage with GSAP
@@ -171,9 +214,9 @@ The `mouseenter` and `mouseleave` callbacks receive the cursor element and the h
 ```js
 import gsap from 'gsap';
 
-cursor.addFocusElements({
+ring.addFocusElements({
   elements: '.js--grow',
-  focusClass: 'cursor--grow',
+  focusClass: 'c--cursor-b--third',
   mouseenter(cursorEl) {
     gsap.to(cursorEl, { scale: 2.5, duration: 0.3, ease: 'power2.out' });
   },
@@ -186,9 +229,9 @@ cursor.addFocusElements({
 ### Show text with animation
 
 ```js
-cursor.addFocusElements({
+ring.addFocusElements({
   elements: '.js--text',
-  focusClass: 'cursor--text-mode',
+  focusClass: 'c--cursor-b--fourth',
   mouseenter(cursorEl, el) {
     cursorEl.textContent = el.dataset.cursorText || 'View';
     gsap.fromTo(cursorEl,
@@ -208,23 +251,23 @@ cursor.addFocusElements({
 ### Magnetic effect (cursor sticks to element center)
 
 ```js
-cursor.addFocusElements({
+ring.addFocusElements({
   elements: '.js--magnetic',
-  focusClass: 'cursor--focused',
+  focusClass: 'c--cursor-b--is-active',
   mouseenter(cursorEl, el) {
     const rect = el.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
     gsap.to(cursorEl, {
-      x: centerX, y: centerY,
-      width: rect.width + 20, height: rect.height + 20,
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+      width: rect.width + 20,
+      height: rect.height + 20,
       borderRadius: '12px',
       duration: 0.4, ease: 'power3.out',
     });
   },
   mouseleave(cursorEl) {
     gsap.to(cursorEl, {
-      width: 20, height: 20,
+      width: 40, height: 40,
       borderRadius: '50%',
       duration: 0.3, ease: 'power2.out',
     });
@@ -235,9 +278,9 @@ cursor.addFocusElements({
 ### Color and blend mode
 
 ```js
-cursor.addFocusElements({
+ring.addFocusElements({
   elements: '.js--invert',
-  focusClass: 'cursor--invert',
+  focusClass: 'c--cursor-b--is-active',
   mouseenter(cursorEl) {
     gsap.to(cursorEl, {
       width: 60, height: 60,
@@ -248,8 +291,8 @@ cursor.addFocusElements({
   },
   mouseleave(cursorEl) {
     gsap.to(cursorEl, {
-      width: 20, height: 20,
-      backgroundColor: '#111',
+      width: 40, height: 40,
+      backgroundColor: 'transparent',
       mixBlendMode: 'normal',
       duration: 0.3,
     });
@@ -257,55 +300,31 @@ cursor.addFocusElements({
 });
 ```
 
-> **Note:** When using GSAP to animate `width`, `height`, or `scale`, remove the CSS `transition` from `.custom-cursor` to avoid conflicts between CSS transitions and GSAP.
+> **Note:** When using GSAP to animate `width`, `height`, or `scale`, remove the CSS `transition` from the cursor element to avoid conflicts.
 
-## CSS Classes
+## CSS Classes Reference
 
-| Class                | When applied                      |
-| -------------------- | --------------------------------- |
-| `cursor--initialized`| After `initialize()`              |
-| `cursor--off-screen` | Mouse leaves the viewport         |
-| `cursor--disabled`   | After `disable()`                 |
-| `cursor--clicking`   | During mousedown → mouseup        |
-| `cursor--focused`    | Hovering a default focus element  |
+All classes are configurable via the payload. These are the defaults used in the demo:
 
-Add your own classes via `focusClass` option or `addFocusElements()`.
+### c--cursor-a (dot)
 
-## Minimal CSS (single cursor)
+| Class                       | When applied              |
+| --------------------------- | ------------------------- |
+| `c--cursor-a--is-hidden`    | Off-screen or disabled    |
+| `c--cursor-a--is-active`    | Hovering a focus element  |
+| `c--cursor-a--second`       | During mousedown          |
+| `c--cursor-a--third`        | Grow state                |
+| `c--cursor-a--fourth`       | Text mode state           |
 
-```css
-.custom-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 20px;
-  height: 20px;
-  background: #111;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate3d(0, 0, 0);
-  transition: width 0.25s ease, height 0.25s ease, background-color 0.25s ease, opacity 0.2s ease;
-  margin-left: -10px;
-  margin-top: -10px;
-}
+### c--cursor-b (ring)
 
-.cursor--off-screen,
-.cursor--disabled {
-  opacity: 0;
-}
-
-.cursor--clicking {
-  width: 14px;
-  height: 14px;
-  margin-left: -7px;
-  margin-top: -7px;
-}
-
-.cursor--focused {
-  background-color: #e74c3c;
-}
-```
+| Class                       | When applied              |
+| --------------------------- | ------------------------- |
+| `c--cursor-b--is-hidden`    | Off-screen or disabled    |
+| `c--cursor-b--is-active`    | Hovering a focus element  |
+| `c--cursor-b--second`       | During mousedown          |
+| `c--cursor-b--third`        | Grow state                |
+| `c--cursor-b--fourth`       | Text mode state           |
 
 ## License
 
