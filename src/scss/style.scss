@@ -1,106 +1,135 @@
-/* ─── c--cursor-a (dot / inner) ─────────────────────── */
+/* ─── c--cursor-a (single wrapper: __item + __artwork) ─── */
 
 .c--cursor-a {
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 8px;
-	height: 8px;
-	background: #111;
-	border-radius: 50%;
 	pointer-events: none;
 	z-index: 10000;
-	transform: translate3d(0, 0, 0);
-	margin-left: -4px;
-	margin-top: -4px;
-	transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, background-color 0.2s ease, opacity 0.15s ease;
 
+	/* Estado: hidden */
 	&--is-hidden {
-		opacity: 0;
+		.c--cursor-a__item,
+		.c--cursor-a__artwork {
+			opacity: 0;
+		}
 	}
 
+	/* Estado: active (hover links/buttons) */
 	&--is-active {
-		background-color: #e74c3c;
+		.c--cursor-a__item {
+			background-color: #e74c3c;
+		}
+
+		.c--cursor-a__artwork {
+			border-color: #e74c3c;
+		}
 	}
 
-	/* clicking */
+	/* Estado: clicking */
 	&--second {
-		width: 6px;
-		height: 6px;
-		margin-left: -3px;
-		margin-top: -3px;
+		.c--cursor-a__item {
+			width: 6px;
+			height: 6px;
+			margin-left: -3px;
+			margin-top: -3px;
+		}
+
+		.c--cursor-a__artwork {
+			width: 30px;
+			height: 30px;
+			margin-left: -15px;
+			margin-top: -15px;
+		}
 	}
 
-	/* grow: dot hides */
+	/* Estado: grow */
 	&--third {
-		opacity: 0;
+		.c--cursor-a__item {
+			opacity: 0;
+		}
+
+		.c--cursor-a__artwork {
+			width: 60px;
+			height: 60px;
+			margin-left: -30px;
+			margin-top: -30px;
+			border-color: rgba(52, 152, 219, 0.6);
+			background-color: rgba(52, 152, 219, 0.1);
+		}
 	}
 
-	/* text-mode: dot hides */
+	/* Estado: text */
 	&--fourth {
-		opacity: 0;
-	}
-}
+		.c--cursor-a__item {
+			opacity: 0;
+		}
 
-/* ─── c--cursor-b (ring / outer) ────────────────────── */
-
-.c--cursor-b {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 40px;
-	height: 40px;
-	border: 1.5px solid #111;
-	background: transparent;
-	border-radius: 50%;
-	pointer-events: none;
-	z-index: 9999;
-	transform: translate3d(0, 0, 0);
-	margin-left: -20px;
-	margin-top: -20px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
-	color: #fff;
-	font-size: 11px;
-	white-space: nowrap;
-	transition: width 0.3s ease, height 0.3s ease, margin 0.3s ease, border-color 0.3s ease, opacity 0.2s ease, background-color 0.3s ease;
-
-	&--is-hidden {
-		opacity: 0;
+		.c--cursor-a__artwork {
+			width: 80px;
+			height: 80px;
+			margin-left: -40px;
+			margin-top: -40px;
+			border-color: transparent;
+			background-color: rgba(0, 0, 0, 0.85);
+		}
 	}
 
-	&--is-active {
-		border-color: #e74c3c;
+	/* Estado: default text (persistent label) */
+	&--fifth {
+		.c--cursor-a__item {
+			opacity: 0;
+		}
+
+		.c--cursor-a__artwork {
+			width: 80px;
+			height: 80px;
+			margin-left: -40px;
+			margin-top: -40px;
+			border-color: transparent;
+			background-color: rgba(44, 62, 80, 0.9);
+		}
 	}
 
-	/* clicking */
-	&--second {
-		width: 30px;
-		height: 30px;
-		margin-left: -15px;
-		margin-top: -15px;
+	/* Dot */
+	&__item {
+		position: fixed;
+		top: 0;
+		left: 0;
+		border-radius: 50%;
+		pointer-events: none;
+		width: 8px;
+		height: 8px;
+		background: #111;
+		z-index: 10000;
+		margin-left: -4px;
+		margin-top: -4px;
+		transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, opacity 0.15s ease;
 	}
 
-	/* grow: ring expands */
-	&--third {
-		width: 60px;
-		height: 60px;
-		margin-left: -30px;
-		margin-top: -30px;
-		border-color: rgba(52, 152, 219, 0.6);
-		background-color: rgba(52, 152, 219, 0.1);
-	}
-
-	/* text-mode: ring becomes filled with text */
-	&--fourth {
-		width: 80px;
-		height: 80px;
-		margin-left: -40px;
-		margin-top: -40px;
-		border-color: transparent;
-		background-color: rgba(0, 0, 0, 0.85);
+	/* Ring */
+	&__artwork {
+		position: fixed;
+		top: 0;
+		left: 0;
+		border-radius: 50%;
+		pointer-events: none;
+		width: 40px;
+		height: 40px;
+		border: 1.5px solid #111;
+		background: transparent;
+		z-index: 9999;
+		margin-left: -20px;
+		margin-top: -20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		color: #fff;
+		font-size: 11px;
+		white-space: nowrap;
+		transition: width 0.3s ease, height 0.3s ease, margin 0.3s ease,
+			border-color 0.3s ease, opacity 0.2s ease, background-color 0.3s ease;
 	}
 }
 

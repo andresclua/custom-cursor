@@ -1,35 +1,40 @@
 /**
  * CustomCursor - A lightweight custom cursor replacement
  *
- * Creates a custom cursor element that follows the mouse with optional lerp interpolation.
+ * Creates a single custom cursor wrapper that manages N child items,
+ * each with its own lerp interpolation (set via data-lerp attribute).
  * Supports focus elements with custom classes and callbacks, disable/enable toggling,
  * clicking states, off-screen detection, and dynamic content via addFocusElements().
  *
  * @class CustomCursor
  *
  * @param {Object} payload - Configuration object
- * @param {HTMLElement|string} payload.element - The cursor DOM element or a selector string
+ * @param {HTMLElement|string} payload.element - The cursor wrapper element or a selector string
  * @param {boolean} [payload.hideTrueCursor=false] - Hide the native cursor
+ * @param {boolean} [payload.disableTouch=true] - Do not initialize on touch devices
  * @param {string[]} [payload.focusElements=['a','button']] - Selectors for default focus hover
  * @param {string} [payload.focusClass='c--cursor-a--is-active'] - Class added on focus-element hover
  * @param {string} [payload.hiddenClass='c--cursor-a--is-hidden'] - Class added when cursor is hidden or off-screen
  * @param {string} [payload.clickingClass='c--cursor-a--second'] - Class added during mousedown
- * @param {number} [payload.lerp=1] - Interpolation speed (0–1). 1 = instant, lower = smoother delay
+ * @param {Function|null} [payload.onInit=null] - Callback called after initialization, receives wrapperEl
+ * @param {Function|null} [payload.onDestroy=null] - Callback called after destroy, receives wrapperEl
  *
  * @example
- * const dot = new CustomCursor({
+ * const cursor = new CustomCursor({
  *   element: '.c--cursor-a',
  *   hideTrueCursor: true,
+ *   disableTouch: true,
  *   focusElements: ['a', 'button'],
  *   focusClass: 'c--cursor-a--is-active',
  *   hiddenClass: 'c--cursor-a--is-hidden',
  *   clickingClass: 'c--cursor-a--second',
- *   lerp: 1,
+ *   onInit: null,
+ *   onDestroy: null,
  * });
  */
 class CustomCursor {
 	constructor(payload) {
-		var { element, hideTrueCursor, focusElements, focusClass, hiddenClass, clickingClass, lerp } = payload;
+		var { element, hideTrueCursor, disableTouch, focusElements, focusClass, hiddenClass, clickingClass, onInit, onDestroy } = payload;
 
 		this.DOM = {
 			element: typeof element === 'string' ? document.querySelector(element) : element,
@@ -38,17 +43,25 @@ class CustomCursor {
 
 		if (!this.DOM.element) throw new Error('CustomCursor: no valid element provided');
 
+		// Auto-discover children with data-lerp attribute
+		this.items = Array.from(this.DOM.element.querySelectorAll('[data-lerp]')).map(el => ({
+			el,
+			lerp: parseFloat(el.dataset.lerp) || 1,
+			current: { x: 0, y: 0 },
+		}));
+
 		this.hideTrueCursor = hideTrueCursor ?? false;
+		this.disableTouch = disableTouch ?? true;
 		this.focusElements = focusElements ?? ['a', 'button'];
 		this.focusClass = focusClass ?? 'c--cursor-a--is-active';
 		this.hiddenClass = hiddenClass ?? 'c--cursor-a--is-hidden';
 		this.clickingClass = clickingClass ?? 'c--cursor-a--second';
-		this.lerp = lerp ?? 1;
+		this.onInit = onInit ?? null;
+		this.onDestroy = onDestroy ?? null;
 
 		this.initialized = false;
 		this.disabled = false;
 		this.position = { x: null, y: null };
-		this.current = { x: 0, y: 0 };
 		this.rafId = null;
 		this.focusEntries = [];
 
@@ -57,50 +70,10 @@ class CustomCursor {
 		this.onMouseLeaveHandler = this.#onMouseLeave.bind(this);
 		this.onMouseDownHandler = this.#onMouseDown.bind(this);
 
-		this.init();
-		this.events();
-	}
+		if (this.disableTouch && this.#isTouch()) return;
 
-	/**
-	 * Initializes the cursor, hides native cursor, registers default
-	 * focus elements and starts the rAF render loop.
-	 */
-	init() {
-		if (this.initialized || this.#isMobile()) return;
-
-		this.DOM.element.classList.add('cursor--initialized');
-
-		if (this.hideTrueCursor) this.#hideCursor();
-
-		this.addFocusElements(this.focusElements);
-
-		const render = () => {
-			if (!this.disabled && this.position.x !== null) {
-				if (this.lerp >= 1) {
-					this.current.x = this.position.x;
-					this.current.y = this.position.y;
-				} else {
-					this.current.x += (this.position.x - this.current.x) * this.lerp;
-					this.current.y += (this.position.y - this.current.y) * this.lerp;
-				}
-				this.DOM.element.style.transform = `translate3d(${this.current.x}px, ${this.current.y}px, 0)`;
-			}
-			this.rafId = requestAnimationFrame(render);
-		};
-		this.rafId = requestAnimationFrame(render);
-
-		this.initialized = true;
-	}
-
-	/**
-	 * Sets up document-level event listeners for mouse tracking,
-	 * enter/leave detection and click state.
-	 */
-	events() {
-		document.addEventListener('mousemove', this.onMouseMoveHandler);
-		document.addEventListener('mouseenter', this.onMouseEnterHandler);
-		document.addEventListener('mouseleave', this.onMouseLeaveHandler);
-		document.addEventListener('mousedown', this.onMouseDownHandler);
+		this.#init();
+		this.#events();
 	}
 
 	/**
@@ -185,14 +158,16 @@ class CustomCursor {
 		this.destroy();
 		Object.assign(this, {
 			hideTrueCursor: newOptions.hideTrueCursor ?? this.hideTrueCursor,
+			disableTouch: newOptions.disableTouch ?? this.disableTouch,
 			focusElements: newOptions.focusElements ?? this.focusElements,
 			focusClass: newOptions.focusClass ?? this.focusClass,
 			hiddenClass: newOptions.hiddenClass ?? this.hiddenClass,
 			clickingClass: newOptions.clickingClass ?? this.clickingClass,
-			lerp: newOptions.lerp ?? this.lerp,
+			onInit: newOptions.onInit ?? this.onInit,
+			onDestroy: newOptions.onDestroy ?? this.onDestroy,
 		});
-		this.init();
-		this.events();
+		this.#init();
+		this.#events();
 		return this;
 	}
 
@@ -247,10 +222,58 @@ class CustomCursor {
 		});
 		this.focusEntries = [];
 
+		if (typeof this.onDestroy === 'function') this.onDestroy(this.DOM.element);
+
 		this.initialized = false;
 	}
 
 	// ─── Private ───────────────────────────────────────────
+
+	/**
+	 * Initializes the cursor, hides native cursor, registers default
+	 * focus elements and starts the rAF render loop.
+	 */
+	#init() {
+		if (this.initialized) return;
+
+		this.DOM.element.classList.add('cursor--initialized');
+
+		if (this.hideTrueCursor) this.#hideCursor();
+
+		this.addFocusElements(this.focusElements);
+
+		const render = () => {
+			if (!this.disabled && this.position.x !== null) {
+				this.items.forEach(item => {
+					if (item.lerp >= 1) {
+						item.current.x = this.position.x;
+						item.current.y = this.position.y;
+					} else {
+						item.current.x += (this.position.x - item.current.x) * item.lerp;
+						item.current.y += (this.position.y - item.current.y) * item.lerp;
+					}
+					item.el.style.transform = `translate3d(${item.current.x}px, ${item.current.y}px, 0)`;
+				});
+			}
+			this.rafId = requestAnimationFrame(render);
+		};
+		this.rafId = requestAnimationFrame(render);
+
+		this.initialized = true;
+
+		if (typeof this.onInit === 'function') this.onInit(this.DOM.element);
+	}
+
+	/**
+	 * Sets up document-level event listeners for mouse tracking,
+	 * enter/leave detection and click state.
+	 */
+	#events() {
+		document.addEventListener('mousemove', this.onMouseMoveHandler);
+		document.addEventListener('mouseenter', this.onMouseEnterHandler);
+		document.addEventListener('mouseleave', this.onMouseLeaveHandler);
+		document.addEventListener('mousedown', this.onMouseDownHandler);
+	}
 
 	#onMouseMove(e) {
 		this.position.x = e.clientX;
@@ -287,8 +310,8 @@ class CustomCursor {
 		}
 	}
 
-	#isMobile() {
-		return /Mobi|Android/i.test(navigator.userAgent);
+	#isTouch() {
+		return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 	}
 }
 
