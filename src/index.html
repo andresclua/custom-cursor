@@ -82,15 +82,27 @@ const cursor = new CustomCursor({
   element: '.c--cursor-a',
   hideTrueCursor: true,
   disableTouch: true,
-  focusElements: ['a', 'button'],
+  focusElements: [
+    'a',
+    'button',
+    '.js--focus',
+    { elements: '.js--grow', focusClass: 'c--cursor-a--third' },
+    {
+      elements: '.js--text',
+      focusClass: 'c--cursor-a--fourth',
+      mouseenter(cursorEl, el) { /* ... */ },
+      mouseleave(cursorEl) { /* ... */ },
+    },
+  ],
   focusClass: 'c--cursor-a--is-active',
   hiddenClass: 'c--cursor-a--is-hidden',
   clickingClass: 'c--cursor-a--second',
   onInit: null,
   onDestroy: null,
+  onMove: null,
 });
 
-// init() and events() run automatically (private)</code></pre></div>
+// #init() and #events() run automatically (private)</code></pre></div>
         </div>
       </section>
 
@@ -160,9 +172,12 @@ const cursor = new CustomCursor({
     }
   }
 }</code></pre></div>
-          <div class="code-tabs__panel" id="e2-js"><pre><code>cursor.addFocusElements({
-  elements: '.js--grow',
-  focusClass: 'c--cursor-a--third',
+          <div class="code-tabs__panel" id="e2-js"><pre><code>// Pass in the constructor focusElements array:
+const cursor = new CustomCursor({
+  element: '.c--cursor-a',
+  focusElements: [
+    { elements: '.js--grow', focusClass: 'c--cursor-a--third' },
+  ],
 });</code></pre></div>
         </div>
       </section>
@@ -202,16 +217,22 @@ const cursor = new CustomCursor({
     }
   }
 }</code></pre></div>
-          <div class="code-tabs__panel" id="e3-js"><pre><code>cursor.addFocusElements({
-  elements: '.js--text',
-  focusClass: 'c--cursor-a--fourth',
-  mouseenter(cursorEl, el) {
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent =
-      el.dataset.cursorText || 'View';
-  },
-  mouseleave(cursorEl) {
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
-  },
+          <div class="code-tabs__panel" id="e3-js"><pre><code>// Pass in the constructor focusElements array:
+const cursor = new CustomCursor({
+  element: '.c--cursor-a',
+  focusElements: [
+    {
+      elements: '.js--text',
+      focusClass: 'c--cursor-a--fourth',
+      mouseenter(cursorEl, el) {
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent =
+          el.dataset.cursorText || 'View';
+      },
+      mouseleave(cursorEl) {
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
+      },
+    },
+  ],
 });</code></pre></div>
         </div>
       </section>
@@ -251,32 +272,37 @@ const cursor = new CustomCursor({
     }
   }
 }</code></pre></div>
-          <div class="code-tabs__panel" id="e4-js"><pre><code>// 1. Zone: enter → show default text, leave → clear
-cursor.addFocusElements({
-  elements: '.js--label-zone',
-  focusClass: 'c--cursor-a--fifth',
-  mouseenter(cursorEl, el) {
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent =
-      el.dataset.cursorText || 'Hi';
-  },
-  mouseleave(cursorEl) {
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
-  },
-});
-
-// 2. Cards: enter → swap text, leave → revert to zone default
-cursor.addFocusElements({
-  elements: '.js--label',
-  focusClass: 'c--cursor-a--fifth-hover',
-  mouseenter(cursorEl, el) {
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent =
-      el.dataset.cursorText || 'View';
-  },
-  mouseleave(cursorEl, el) {
-    const zone = el.closest('.js--label-zone');
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent =
-      zone ? zone.dataset.cursorText : 'Hi';
-  },
+          <div class="code-tabs__panel" id="e4-js"><pre><code>// Pass both zone and cards in the constructor focusElements array:
+const cursor = new CustomCursor({
+  element: '.c--cursor-a',
+  focusElements: [
+    // 1. Zone: enter → show default text, leave → clear
+    {
+      elements: '.js--label-zone',
+      focusClass: 'c--cursor-a--fifth',
+      mouseenter(cursorEl, el) {
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent =
+          el.dataset.cursorText || 'Hi';
+      },
+      mouseleave(cursorEl) {
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
+      },
+    },
+    // 2. Cards: enter → swap text, leave → revert to zone default
+    {
+      elements: '.js--label',
+      focusClass: 'c--cursor-a--fifth-hover',
+      mouseenter(cursorEl, el) {
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent =
+          el.dataset.cursorText || 'View';
+      },
+      mouseleave(cursorEl, el) {
+        const zone = el.closest('.js--label-zone');
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent =
+          zone ? zone.dataset.cursorText : 'Hi';
+      },
+    },
+  ],
 });</code></pre></div>
         </div>
       </section>
@@ -365,7 +391,7 @@ const cursor = new CustomCursor({
       <!-- 8 ─ Dynamic content (AJAX / Load More) -->
       <section class="example">
         <h2 class="example__heading">8. Dynamic Content (AJAX / Load More)</h2>
-        <p class="example__desc">When new HTML is injected into the DOM (AJAX, sliders, infinite scroll), the cursor doesn't know about the new elements. You need to call <code>addFocusElements()</code> on the new nodes after they are added.</p>
+        <p class="example__desc">When new HTML is injected into the DOM (AJAX, sliders, infinite scroll), the cursor doesn't know about the new elements. Call <code>cursor.update({})</code> to re-bind — selectors are re-evaluated and new nodes are picked up automatically.</p>
         <div class="example__row" id="js--grid">
           <div class="c--card-a js--dynamic" data-cursor-text="01">Card 01</div>
           <div class="c--card-a js--dynamic" data-cursor-text="02">Card 02</div>
@@ -399,27 +425,30 @@ const cursor = new CustomCursor({
     }
   }
 }</code></pre></div>
-          <div class="code-tabs__panel" id="e8-js"><pre><code>// 1. Register initial cards
-cursor.addFocusElements({
-  elements: '.js--dynamic',
-  focusClass: 'c--cursor-a--fourth',
-  mouseenter(cursorEl, el) {
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent =
-      el.dataset.cursorText || 'View';
-  },
-  mouseleave(cursorEl) {
-    cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
-  },
+          <div class="code-tabs__panel" id="e8-js"><pre><code>// 1. Dynamic cards are registered via selector in the constructor:
+const cursor = new CustomCursor({
+  element: '.c--cursor-a',
+  focusElements: [
+    {
+      elements: '.js--dynamic',
+      focusClass: 'c--cursor-a--fourth',
+      mouseenter(cursorEl, el) {
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent =
+          el.dataset.cursorText || 'View';
+      },
+      mouseleave(cursorEl) {
+        cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
+      },
+    },
+  ],
 });
 
-// 2. Simulate AJAX — inject new cards and re-register
+// 2. Simulate AJAX — inject new cards and call update()
 const grid = document.getElementById('js--grid');
 const loadMoreBtn = document.getElementById('js--load-more');
 let cardCount = 2;
 
 loadMoreBtn.addEventListener('click', () => {
-  const newCards = [];
-
   for (let i = 0; i &lt; 2; i++) {
     cardCount++;
     const card = document.createElement('div');
@@ -427,21 +456,10 @@ loadMoreBtn.addEventListener('click', () => {
     card.dataset.cursorText = String(cardCount).padStart(2, '0');
     card.textContent = 'Card ' + String(cardCount).padStart(2, '0');
     grid.appendChild(card);
-    newCards.push(card);
   }
 
-  // 3. Key step: register the NEW elements with the cursor
-  cursor.addFocusElements({
-    elements: newCards,
-    focusClass: 'c--cursor-a--fourth',
-    mouseenter(cursorEl, el) {
-      cursorEl.querySelector('.c--cursor-a__artwork').textContent =
-        el.dataset.cursorText || 'View';
-    },
-    mouseleave(cursorEl) {
-      cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
-    },
-  });
+  // 3. Key step: re-bind so new .js--dynamic elements are picked up
+  cursor.update({});
 });</code></pre></div>
         </div>
       </section>
