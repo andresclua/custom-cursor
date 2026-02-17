@@ -91,6 +91,22 @@
 		}
 	}
 
+	/* Estado: label card hover */
+	&--sixth {
+		.c--cursor-a__item {
+			opacity: 0;
+		}
+
+		.c--cursor-a__artwork {
+			width: 80px;
+			height: 80px;
+			margin-left: -40px;
+			margin-top: -40px;
+			border-color: transparent;
+			background-color: rgba(44, 62, 80, 1);
+		}
+	}
+
 	/* Dot */
 	&__item {
 		position: fixed;

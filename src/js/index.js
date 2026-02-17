@@ -36,7 +36,7 @@ const baseFocusElements = [
 	},
 	{
 		elements: '.js--label',
-		focusClass: 'c--cursor-a--fifth-hover',
+		focusClass: 'c--cursor-a--sixth',
 		mouseenter(cursorEl, el) {
 			cursorEl.querySelector('.c--cursor-a__artwork').textContent = el.dataset.cursorText || 'View';
 		},
