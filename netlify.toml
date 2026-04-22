@@ -1,5 +1,2 @@
-[[redirects]]
-  from = "/*"
-  to = "https://cursor.andresclua.com/:splat"
-  status = 301
-  force = true
+[build]
+  publish = "demo"
