@@ -4,418 +4,460 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Custom Cursor — Demo</title>
-    <script type="module" crossorigin src="/assets/index-DyO03aPR.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DLTOogUD.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/assets/index-DJIYb316.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Cnb5456s.css">
   </head>
   <body>
 
-    <!-- Cursor elements -->
-    <div class="c--cursor-a"></div>
-    <div class="c--cursor-b"></div>
+    <!-- Cursor -->
+    <div class="c--cursor-a">
+      <span class="c--cursor-a__item" data-lerp="1"></span>
+      <span class="c--cursor-a__artwork" data-lerp="0.15"></span>
+    </div>
 
-    <div class="demo">
-      <h1 class="demo__title">Custom Cursor</h1>
-      <p class="demo__subtitle">Lightweight custom cursor library — hover, click, and interact with the examples below.</p>
+    <!-- ─── Hero ─────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero__inner">
+        <span class="hero__badge">v1.1.0</span>
+        <h1 class="hero__title">CUSTOM<br>CURSOR</h1>
+        <p class="hero__sub">A lightweight JS library for customizable animated cursors — dot, ring, lerp, callbacks.</p>
+        <div class="hero__actions">
+          <button class="hero__install js--copy" data-copy="npm install @andresclua/custom-cursor" aria-label="Copy install command">
+            <span class="hero__install-text">npm install @andresclua/custom-cursor</span>
+            <svg class="hero__install-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+          <a href="https://www.npmjs.com/package/@andresclua/custom-cursor" class="btn-pill" target="_blank" rel="noopener">VIEW ON NPM</a>
+          <a href="https://github.com/sponsors/andresclua" class="btn-ghost-pill" target="_blank" rel="noopener">♥ Sponsor</a>
+        </div>
+      </div>
+    </section>
 
-      <!-- 0 ─ Setup (dot + ring) -->
-      <section class="example">
-        <h2 class="example__heading">0. Setup (Dot + Ring)</h2>
-        <p class="example__desc">Two cursor elements — a dot that follows instantly and a ring that follows with smooth delay.</p>
+    <!-- ─── Red Band ──────────────────────────────────────── -->
+    <div class="red-band" aria-hidden="true"></div>
 
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="setup-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="setup-scss">SCSS</button>
-            <button class="code-tabs__btn" data-tab="setup-js">JS</button>
+    <!-- ─── Examples ─────────────────────────────────────── -->
+    <main class="examples">
+      <div class="examples__inner">
+
+        <!-- 00 · Setup -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">00</span>
+            <h2 class="example__title">Setup — Dot + Ring</h2>
+            <p class="example__desc">Two child elements with <code>data-lerp</code> — the dot follows instantly (<code>1</code>), the ring follows with smooth delay (<code>0.15</code>).</p>
           </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="setup-html"><pre><code>&lt;div class="c--cursor-a"&gt;&lt;/div&gt;
-&lt;div class="c--cursor-b"&gt;&lt;/div&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="setup-scss"><pre><code>.c--cursor-a {
+          <div class="example__body">
+            <div class="example__preview">
+              <a href="#" class="demo-link" onclick="return false">Hover me</a>
+              <button class="demo-btn">Click me</button>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="s0-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="s0-scss">SCSS</button>
+                  <button class="code-tabs__btn" data-tab="s0-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="s0-html"><pre><code>&lt;div class="c--cursor-a"&gt;
+  &lt;span class="c--cursor-a__item"
+        data-lerp="1"&gt;&lt;/span&gt;
+  &lt;span class="c--cursor-a__artwork"
+        data-lerp="0.15"&gt;&lt;/span&gt;
+&lt;/div&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="s0-scss"><pre><code>.c--cursor-a {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 8px;
-  background: #111;
-  border-radius: 50%;
+  top: 0; left: 0;
   pointer-events: none;
   z-index: 10000;
-  margin-left: -4px;
-  margin-top: -4px;
-  transition: width 0.2s ease, height 0.2s ease,
-              margin 0.2s ease, background-color 0.2s ease,
-              opacity 0.15s ease;
 
-  &--is-hidden { opacity: 0; }
-  &--is-active { background-color: #e74c3c; }
-  &--second { width: 6px; height: 6px; margin-left: -3px; margin-top: -3px; }
-}
+  &__item {
+    position: fixed;
+    top: 0; left: 0;
+    width: 8px; height: 8px;
+    background: #25282b;
+    border-radius: 50%;
+    pointer-events: none;
+    margin-left: -4px;
+    margin-top: -4px;
+    transition: width .2s, height .2s,
+                margin .2s, opacity .15s;
+  }
 
-.c--cursor-b {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  border: 1.5px solid #111;
-  background: transparent;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  margin-left: -20px;
-  margin-top: -20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  color: #fff;
-  font-size: 11px;
-  transition: width 0.3s ease, height 0.3s ease,
-              margin 0.3s ease, border-color 0.3s ease,
-              opacity 0.2s ease, background-color 0.3s ease;
-
-  &--is-hidden { opacity: 0; }
-  &--is-active { border-color: #e74c3c; }
-  &--second { width: 30px; height: 30px; margin-left: -15px; margin-top: -15px; }
+  &__artwork {
+    position: fixed;
+    top: 0; left: 0;
+    width: 40px; height: 40px;
+    border: 1.5px solid #25282b;
+    border-radius: 50%;
+    pointer-events: none;
+    margin-left: -20px;
+    margin-top: -20px;
+    transition: width .3s, height .3s,
+                margin .3s, border-color .3s,
+                opacity .2s, background-color .3s;
+  }
 }</code></pre></div>
-          <div class="code-tabs__panel" id="setup-js"><pre><code>import CustomCursor from '@andresclua/custom-cursor';
+                <div class="code-tabs__panel" id="s0-js"><pre><code>import CustomCursor from '@andresclua/custom-cursor';
 
-const dot = new CustomCursor({
+const cursor = new CustomCursor({
   element: '.c--cursor-a',
   hideTrueCursor: true,
-  focusElements: ['a', 'button'],
-  focusClass: 'c--cursor-a--is-active',
-  hiddenClass: 'c--cursor-a--is-hidden',
+  focusElements:  ['a', 'button'],
+  focusClass:    'c--cursor-a--is-active',
+  hiddenClass:   'c--cursor-a--is-hidden',
   clickingClass: 'c--cursor-a--second',
-  lerp: 1,
-});
-
-const ring = new CustomCursor({
-  element: '.c--cursor-b',
-  focusElements: ['a', 'button'],
-  focusClass: 'c--cursor-b--is-active',
-  hiddenClass: 'c--cursor-b--is-hidden',
-  clickingClass: 'c--cursor-b--second',
-  lerp: 0.15,
-});
-
-// init() and events() run automatically in the constructor</code></pre></div>
-        </div>
-      </section>
-
-      <!-- 1 ─ Basic focus -->
-      <section class="example">
-        <h2 class="example__heading">1. Basic Focus (links &amp; buttons)</h2>
-        <p class="example__desc">Hover over links and buttons — the cursor changes color.</p>
-        <div class="example__row">
-          <a href="#" class="c--card-a" onclick="return false">Link Card</a>
-          <button class="c--btn-a">Button</button>
-          <a href="#" class="c--card-a" onclick="return false">Another Link</a>
-        </div>
-
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="e1-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="e1-scss">SCSS</button>
-            <button class="code-tabs__btn" data-tab="e1-js">JS</button>
+});</code></pre></div>
+              </div>
+            </div>
           </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="e1-html"><pre><code>&lt;a href="#" class="c--card-a"&gt;Link Card&lt;/a&gt;
-&lt;button class="c--btn-a"&gt;Button&lt;/button&gt;
-&lt;a href="#" class="c--card-a"&gt;Another Link&lt;/a&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="e1-scss"><pre><code>/* Dot turns red */
-.c--cursor-a {
-  &--is-active { background-color: #e74c3c; }
-}
+        </section>
 
-/* Ring border turns red */
-.c--cursor-b {
-  &--is-active { border-color: #e74c3c; }
+        <!-- 01 · Basic Focus -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">01</span>
+            <h2 class="example__title">Basic Focus — Links &amp; Buttons</h2>
+            <p class="example__desc">Pass selectors to <code>focusElements</code> and a <code>focusClass</code> — the cursor changes color on hover automatically.</p>
+          </div>
+          <div class="example__body">
+            <div class="example__preview">
+              <a href="#" class="demo-card" onclick="return false">Link Card</a>
+              <button class="demo-btn">Button</button>
+              <a href="#" class="demo-card" onclick="return false">Another Link</a>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="e1-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="e1-scss">SCSS</button>
+                  <button class="code-tabs__btn" data-tab="e1-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="e1-html"><pre><code>&lt;a href="#"&gt;Link Card&lt;/a&gt;
+&lt;button&gt;Button&lt;/button&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="e1-scss"><pre><code>.c--cursor-a {
+  &--is-active {
+    .c--cursor-a__item {
+      background-color: #e60000;
+    }
+    .c--cursor-a__artwork {
+      border-color: #e60000;
+    }
+  }
 }</code></pre></div>
-          <div class="code-tabs__panel" id="e1-js"><pre><code>// Already handled by focusElements in the constructor:
-const dot = new CustomCursor({
+                <div class="code-tabs__panel" id="e1-js"><pre><code>const cursor = new CustomCursor({
   element: '.c--cursor-a',
   focusElements: ['a', 'button'],
   focusClass: 'c--cursor-a--is-active',
-});
-
-const ring = new CustomCursor({
-  element: '.c--cursor-b',
-  focusElements: ['a', 'button'],
-  focusClass: 'c--cursor-b--is-active',
 });</code></pre></div>
-        </div>
-      </section>
-
-      <!-- 2 ─ Custom focus class (grow) -->
-      <section class="example">
-        <h2 class="example__heading">2. Custom Focus Class (grow)</h2>
-        <p class="example__desc">Hover over these cards — the cursor grows.</p>
-        <div class="example__row">
-          <div class="c--card-a js--grow">Grow Card A</div>
-          <div class="c--card-a js--grow">Grow Card B</div>
-        </div>
-
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="e2-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="e2-scss">SCSS</button>
-            <button class="code-tabs__btn" data-tab="e2-js">JS</button>
+              </div>
+            </div>
           </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="e2-html"><pre><code>&lt;div class="c--card-a js--grow"&gt;Grow Card A&lt;/div&gt;
-&lt;div class="c--card-a js--grow"&gt;Grow Card B&lt;/div&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="e2-scss"><pre><code>/* Dot hides */
-.c--cursor-a {
-  &--third { opacity: 0; }
-}
+        </section>
 
-/* Ring expands */
-.c--cursor-b {
+        <!-- 02 · Grow -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">02</span>
+            <h2 class="example__title">Custom Focus Class — Grow</h2>
+            <p class="example__desc">Pass an object with <code>elements</code> and a custom <code>focusClass</code> to apply a different cursor state per element group.</p>
+          </div>
+          <div class="example__body">
+            <div class="example__preview">
+              <div class="demo-card js--grow">Grow A</div>
+              <div class="demo-card js--grow">Grow B</div>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="e2-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="e2-scss">SCSS</button>
+                  <button class="code-tabs__btn" data-tab="e2-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="e2-html"><pre><code>&lt;div class="js--grow"&gt;Grow A&lt;/div&gt;
+&lt;div class="js--grow"&gt;Grow B&lt;/div&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="e2-scss"><pre><code>.c--cursor-a {
   &--third {
-    width: 60px;
-    height: 60px;
-    margin-left: -30px;
-    margin-top: -30px;
-    border-color: rgba(52, 152, 219, 0.6);
-    background-color: rgba(52, 152, 219, 0.1);
+    .c--cursor-a__item { opacity: 0; }
+    .c--cursor-a__artwork {
+      width: 60px;
+      height: 60px;
+      margin-left: -30px;
+      margin-top: -30px;
+      border-color: rgba(230, 0, 0, 0.6);
+      background-color: rgba(230, 0, 0, 0.08);
+    }
   }
 }</code></pre></div>
-          <div class="code-tabs__panel" id="e2-js"><pre><code>dot.addFocusElements({
-  elements: '.js--grow',
-  focusClass: 'c--cursor-a--third',
-});
-
-ring.addFocusElements({
-  elements: '.js--grow',
-  focusClass: 'c--cursor-b--third',
-});</code></pre></div>
-        </div>
-      </section>
-
-      <!-- 3 ─ Focus with callbacks (text inside cursor) -->
-      <section class="example">
-        <h2 class="example__heading">3. Focus with Callbacks (text)</h2>
-        <p class="example__desc">Hover over these cards — the cursor shows text from each card's <code>data-cursor-text</code> attribute.</p>
-        <div class="example__row">
-          <div class="c--card-a js--text" data-cursor-text="View">View Project</div>
-          <div class="c--card-a js--text" data-cursor-text="Read">Read Article</div>
-          <div class="c--card-a js--text" data-cursor-text="Play">Play Video</div>
-          <div class="c--card-a js--text" data-cursor-text="Explore">Explore Gallery</div>
-        </div>
-
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="e3-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="e3-scss">SCSS</button>
-            <button class="code-tabs__btn" data-tab="e3-js">JS</button>
-          </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="e3-html"><pre><code>&lt;div class="c--card-a js--text" data-cursor-text="View"&gt;View Project&lt;/div&gt;
-&lt;div class="c--card-a js--text" data-cursor-text="Read"&gt;Read Article&lt;/div&gt;
-&lt;div class="c--card-a js--text" data-cursor-text="Play"&gt;Play Video&lt;/div&gt;
-&lt;div class="c--card-a js--text" data-cursor-text="Explore"&gt;Explore Gallery&lt;/div&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="e3-scss"><pre><code>/* Dot hides */
-.c--cursor-a {
-  &--fourth { opacity: 0; }
-}
-
-/* Ring becomes filled circle with text */
-.c--cursor-b {
-  &--fourth {
-    width: 80px;
-    height: 80px;
-    margin-left: -40px;
-    margin-top: -40px;
-    border-color: transparent;
-    background-color: rgba(0, 0, 0, 0.85);
-  }
-}</code></pre></div>
-          <div class="code-tabs__panel" id="e3-js"><pre><code>dot.addFocusElements({
-  elements: '.js--text',
-  focusClass: 'c--cursor-a--fourth',
-});
-
-ring.addFocusElements({
-  elements: '.js--text',
-  focusClass: 'c--cursor-b--fourth',
-  mouseenter(cursorEl, el) {
-    cursorEl.textContent = el.dataset.cursorText || 'View';
-  },
-  mouseleave(cursorEl) {
-    cursorEl.textContent = '';
-  },
-});</code></pre></div>
-        </div>
-      </section>
-
-      <!-- 4 ─ Disable / Enable toggle -->
-      <section class="example">
-        <h2 class="example__heading">4. Disable / Enable</h2>
-        <p class="example__desc">Toggle the custom cursor on and off.</p>
-        <div class="example__row">
-          <button class="c--btn-a" id="js--toggle">Disable Cursor</button>
-        </div>
-
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="e4-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="e4-js">JS</button>
-          </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="e4-html"><pre><code>&lt;button class="c--btn-a" id="js--toggle"&gt;Disable Cursor&lt;/button&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="e4-js"><pre><code>const toggleBtn = document.getElementById('js--toggle');
-let isDisabled = false;
-
-toggleBtn.addEventListener('click', () => {
-  isDisabled = !isDisabled;
-  if (isDisabled) {
-    dot.disable();
-    ring.disable();
-  } else {
-    dot.enable();
-    ring.enable();
-  }
-});</code></pre></div>
-        </div>
-      </section>
-
-      <!-- 5 ─ Update options dynamically -->
-      <section class="example">
-        <h2 class="example__heading">5. Update Options</h2>
-        <p class="example__desc">Change cursor options at runtime.</p>
-        <div class="example__row">
-          <button class="c--btn-a" id="js--update">Toggle Large Cursor</button>
-        </div>
-
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="e5-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="e5-js">JS</button>
-          </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="e5-html"><pre><code>&lt;button class="c--btn-a" id="js--update"&gt;Toggle Large Cursor&lt;/button&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="e5-js"><pre><code>const updateBtn = document.getElementById('js--update');
-let isLarge = false;
-
-updateBtn.addEventListener('click', () => {
-  isLarge = !isLarge;
-  if (isLarge) {
-    dot.update({ focusClass: 'c--cursor-a--third' });
-    ring.update({ focusClass: 'c--cursor-b--third', lerp: 0.15 });
-  } else {
-    dot.update({ focusClass: 'c--cursor-a--is-active' });
-    ring.update({ focusClass: 'c--cursor-b--is-active', lerp: 0.15 });
-  }
-});</code></pre></div>
-        </div>
-      </section>
-
-      <!-- 7 ─ Dynamic content (AJAX / Load More) -->
-      <section class="example">
-        <h2 class="example__heading">7. Dynamic Content (AJAX / Load More)</h2>
-        <p class="example__desc">When new HTML is injected into the DOM (AJAX, sliders, infinite scroll), the cursor doesn't know about the new elements. You need to call <code>addFocusElements()</code> on the new nodes after they are added.</p>
-        <div class="example__row" id="js--grid">
-          <div class="c--card-a js--dynamic" data-cursor-text="01">Card 01</div>
-          <div class="c--card-a js--dynamic" data-cursor-text="02">Card 02</div>
-        </div>
-        <div style="margin-top: 12px;">
-          <button class="c--btn-a" id="js--load-more">Load More</button>
-        </div>
-
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="e7-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="e7-scss">SCSS</button>
-            <button class="code-tabs__btn" data-tab="e7-js">JS</button>
-          </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="e7-html"><pre><code>&lt;div class="example__row" id="js--grid"&gt;
-  &lt;div class="c--card-a js--dynamic" data-cursor-text="01"&gt;Card 01&lt;/div&gt;
-  &lt;div class="c--card-a js--dynamic" data-cursor-text="02"&gt;Card 02&lt;/div&gt;
-&lt;/div&gt;
-&lt;button class="c--btn-a" id="js--load-more"&gt;Load More&lt;/button&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="e7-scss"><pre><code>/* Same text-mode styles from example 3 */
-.c--cursor-a {
-  &--fourth { opacity: 0; }
-}
-
-.c--cursor-b {
-  &--fourth {
-    width: 80px;
-    height: 80px;
-    margin-left: -40px;
-    margin-top: -40px;
-    border-color: transparent;
-    background-color: rgba(0, 0, 0, 0.85);
-  }
-}</code></pre></div>
-          <div class="code-tabs__panel" id="e7-js"><pre><code>// 1. Register initial cards
-dot.addFocusElements({ elements: '.js--dynamic', focusClass: 'c--cursor-a--fourth' });
-ring.addFocusElements({
-  elements: '.js--dynamic',
-  focusClass: 'c--cursor-b--fourth',
-  mouseenter(cursorEl, el) {
-    cursorEl.textContent = el.dataset.cursorText || 'View';
-  },
-  mouseleave(cursorEl) {
-    cursorEl.textContent = '';
-  },
-});
-
-// 2. Simulate AJAX — inject new cards and re-register
-const grid = document.getElementById('js--grid');
-const loadMoreBtn = document.getElementById('js--load-more');
-let cardCount = 2;
-
-loadMoreBtn.addEventListener('click', () => {
-  const newCards = [];
-
-  for (let i = 0; i &lt; 2; i++) {
-    cardCount++;
-    const card = document.createElement('div');
-    card.className = 'c--card-a js--dynamic';
-    card.dataset.cursorText = String(cardCount).padStart(2, '0');
-    card.textContent = 'Card ' + String(cardCount).padStart(2, '0');
-    grid.appendChild(card);
-    newCards.push(card);
-  }
-
-  // 3. Key step: register the NEW elements with the cursor
-  dot.addFocusElements({ elements: newCards, focusClass: 'c--cursor-a--fourth' });
-  ring.addFocusElements({
-    elements: newCards,
-    focusClass: 'c--cursor-b--fourth',
-    mouseenter(cursorEl, el) {
-      cursorEl.textContent = el.dataset.cursorText || 'View';
-    },
-    mouseleave(cursorEl) {
-      cursorEl.textContent = '';
-    },
-  });
-});</code></pre></div>
-        </div>
-      </section>
-
-      <!-- 6 ─ Generic .js--focus elements -->
-      <section class="example">
-        <h2 class="example__heading">6. Generic Focus Elements</h2>
-        <p class="example__desc">Any element with <code>.js--focus</code> triggers the focused state.</p>
-        <div class="example__row">
-          <span class="js--focus">Focusable Span</span>
-          <div class="js--focus">Focusable Div</div>
-        </div>
-
-        <div class="code-tabs" data-tabs>
-          <div class="code-tabs__nav">
-            <button class="code-tabs__btn code-tabs__btn--active" data-tab="e6-html">HTML</button>
-            <button class="code-tabs__btn" data-tab="e6-js">JS</button>
-          </div>
-          <div class="code-tabs__panel code-tabs__panel--active" id="e6-html"><pre><code>&lt;span class="js--focus"&gt;Focusable Span&lt;/span&gt;
-&lt;div class="js--focus"&gt;Focusable Div&lt;/div&gt;</code></pre></div>
-          <div class="code-tabs__panel" id="e6-js"><pre><code>// Pass '.js--focus' in the constructor focusElements array:
-const dot = new CustomCursor({
+                <div class="code-tabs__panel" id="e2-js"><pre><code>const cursor = new CustomCursor({
   element: '.c--cursor-a',
-  focusElements: ['a', 'button', '.js--focus'],
+  focusElements: [
+    'a',
+    'button',
+    {
+      elements: '.js--grow',
+      focusClass: 'c--cursor-a--third',
+    },
+  ],
+});</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 03 · Text Callbacks -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">03</span>
+            <h2 class="example__title">Focus with Callbacks — Text</h2>
+            <p class="example__desc">Use <code>mouseenter</code> / <code>mouseleave</code> callbacks to inject text from <code>data-cursor-text</code> directly into the cursor ring.</p>
+          </div>
+          <div class="example__body">
+            <div class="example__preview">
+              <div class="demo-card js--text" data-cursor-text="View">View Project</div>
+              <div class="demo-card js--text" data-cursor-text="Read">Read Article</div>
+              <div class="demo-card js--text" data-cursor-text="Play">Play Video</div>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="e3-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="e3-scss">SCSS</button>
+                  <button class="code-tabs__btn" data-tab="e3-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="e3-html"><pre><code>&lt;div class="js--text"
+     data-cursor-text="View"&gt;
+  View Project
+&lt;/div&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="e3-scss"><pre><code>.c--cursor-a {
+  &--fourth {
+    .c--cursor-a__item { opacity: 0; }
+    .c--cursor-a__artwork {
+      width: 80px;
+      height: 80px;
+      margin-left: -40px;
+      margin-top: -40px;
+      border-color: transparent;
+      background-color: rgba(0, 0, 0, 0.85);
+    }
+  }
+}</code></pre></div>
+                <div class="code-tabs__panel" id="e3-js"><pre><code>const cursor = new CustomCursor({
+  element: '.c--cursor-a',
+  focusElements: [
+    {
+      elements: '.js--text',
+      focusClass: 'c--cursor-a--fourth',
+      mouseenter(cursorEl, el) {
+        cursorEl
+          .querySelector('.c--cursor-a__artwork')
+          .textContent =
+            el.dataset.cursorText || 'View';
+      },
+      mouseleave(cursorEl) {
+        cursorEl
+          .querySelector('.c--cursor-a__artwork')
+          .textContent = '';
+      },
+    },
+  ],
+});</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04 · Disable / Enable -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">04</span>
+            <h2 class="example__title">Disable / Enable</h2>
+            <p class="example__desc">Call <code>cursor.disable()</code> to hide the cursor and restore the native pointer. Call <code>cursor.enable()</code> to bring it back.</p>
+          </div>
+          <div class="example__body">
+            <div class="example__preview">
+              <button class="demo-btn" id="js--toggle">Disable Cursor</button>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="e4-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="e4-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="e4-html"><pre><code>&lt;button id="js--toggle"&gt;
+  Disable Cursor
+&lt;/button&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="e4-js"><pre><code>const btn = document.getElementById('js--toggle');
+let disabled = false;
+
+btn.addEventListener('click', () => {
+  disabled = !disabled;
+  if (disabled) {
+    cursor.disable();
+    btn.textContent = 'Enable Cursor';
+  } else {
+    cursor.enable();
+    btn.textContent = 'Disable Cursor';
+  }
+});</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 05 · Update Options -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">05</span>
+            <h2 class="example__title">Update Options</h2>
+            <p class="example__desc">Call <code>cursor.update(newOptions)</code> to merge new config at runtime — without destroying the instance or stopping the rAF loop.</p>
+          </div>
+          <div class="example__body">
+            <div class="example__preview">
+              <button class="demo-btn" id="js--update">Toggle Large Cursor</button>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="e5-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="e5-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="e5-html"><pre><code>&lt;button id="js--update"&gt;
+  Toggle Large Cursor
+&lt;/button&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="e5-js"><pre><code>const btn = document.getElementById('js--update');
+let large = false;
+
+btn.addEventListener('click', () => {
+  large = !large;
+  cursor.update({
+    focusClass: large
+      ? 'c--cursor-a--third'
+      : 'c--cursor-a--is-active',
+  });
+  btn.textContent = large
+    ? 'Revert Cursor'
+    : 'Toggle Large Cursor';
+});</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 06 · Generic Focus -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">06</span>
+            <h2 class="example__title">Generic Focus Elements</h2>
+            <p class="example__desc">Any CSS selector works in <code>focusElements</code> — not just <code>a</code> and <code>button</code>. Pass <code>'.js--focus'</code> to target arbitrary elements.</p>
+          </div>
+          <div class="example__body">
+            <div class="example__preview">
+              <span class="js--focus">Focusable Span</span>
+              <div class="js--focus">Focusable Div</div>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="e6-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="e6-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="e6-html"><pre><code>&lt;span class="js--focus"&gt;
+  Focusable Span
+&lt;/span&gt;
+&lt;div class="js--focus"&gt;
+  Focusable Div
+&lt;/div&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="e6-js"><pre><code>const cursor = new CustomCursor({
+  element: '.c--cursor-a',
+  focusElements: [
+    'a',
+    'button',
+    '.js--focus',
+  ],
   focusClass: 'c--cursor-a--is-active',
 });</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 07 · Dynamic Content -->
+        <section class="example">
+          <div class="example__header">
+            <span class="example__badge">07</span>
+            <h2 class="example__title">Dynamic Content — Load More</h2>
+            <p class="example__desc">After injecting new DOM nodes (AJAX, infinite scroll), call <code>cursor.update({})</code> to re-evaluate all selectors and pick up the new elements.</p>
+          </div>
+          <div class="example__body">
+            <div class="example__preview" style="flex-direction: column; align-items: stretch;">
+              <div class="demo-grid" id="js--grid">
+                <div class="demo-grid-card js--dynamic" data-cursor-text="01">Card 01</div>
+                <div class="demo-grid-card js--dynamic" data-cursor-text="02">Card 02</div>
+              </div>
+              <div style="margin-top: 16px; display: flex; justify-content: center;">
+                <button class="demo-btn" id="js--load-more">Load More</button>
+              </div>
+            </div>
+            <div class="example__code">
+              <div class="code-tabs" data-tabs>
+                <div class="code-tabs__nav">
+                  <button class="code-tabs__btn code-tabs__btn--active" data-tab="e7-html">HTML</button>
+                  <button class="code-tabs__btn" data-tab="e7-js">JS</button>
+                </div>
+                <div class="code-tabs__panel code-tabs__panel--active" id="e7-html"><pre><code>&lt;div id="js--grid"&gt;
+  &lt;div class="js--dynamic"
+       data-cursor-text="01"&gt;Card 01&lt;/div&gt;
+  &lt;div class="js--dynamic"
+       data-cursor-text="02"&gt;Card 02&lt;/div&gt;
+&lt;/div&gt;
+&lt;button id="js--load-more"&gt;
+  Load More
+&lt;/button&gt;</code></pre></div>
+                <div class="code-tabs__panel" id="e7-js"><pre><code>let count = 2;
+const grid = document.getElementById('js--grid');
+
+document
+  .getElementById('js--load-more')
+  .addEventListener('click', () => {
+    for (let i = 0; i &lt; 2; i++) {
+      count++;
+      const card = document.createElement('div');
+      card.className = 'js--dynamic';
+      card.dataset.cursorText =
+        String(count).padStart(2, '0');
+      card.textContent =
+        'Card ' + String(count).padStart(2, '0');
+      grid.appendChild(card);
+    }
+    // Re-evaluate selectors — picks up new nodes
+    cursor.update({});
+  });</code></pre></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- ─── Footer ───────────────────────────────────────── -->
+    <footer class="footer">
+      <div class="footer__inner">
+        <div class="footer__left">
+          <span class="footer__name">@andresclua/custom-cursor</span>
+          <span class="footer__version">v1.1.0</span>
         </div>
-      </section>
-    </div>
+        <div class="footer__right">
+          <a href="https://www.npmjs.com/package/@andresclua/custom-cursor" class="footer__link" target="_blank" rel="noopener">npm</a>
+          <a href="https://github.com/andresclua" class="footer__link" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/sponsors/andresclua" class="footer__link footer__link--sponsor" target="_blank" rel="noopener">♥ Sponsor</a>
+          <span class="footer__license">MIT License</span>
+        </div>
+      </div>
+    </footer>
 
 
     <!-- Tabs logic -->
