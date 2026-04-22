@@ -2,6 +2,8 @@
 
 A lightweight JavaScript library for creating customizable animated cursors.
 
+**[Live Demo →](https://cursor.andresclua.com)**
+
 ## Installation
 
 ```bash

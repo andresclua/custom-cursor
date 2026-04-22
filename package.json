@@ -1,7 +1,7 @@
 {
     "name": "@andresclua/custom-cursor",
     "private": false,
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "A lightweight JavaScript library for creating customizable animated cursors",
     "type": "module",
     "main": "./dist/CustomCursor.umd.js",
