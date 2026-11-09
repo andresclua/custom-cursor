@@ -74,6 +74,7 @@ class CustomCursor {
 		this.onMouseEnterHandler = this.#onMouseEnter.bind(this);
 		this.onMouseLeaveHandler = this.#onMouseLeave.bind(this);
 		this.onMouseDownHandler = this.#onMouseDown.bind(this);
+		this.onMouseUpHandler = this.#onMouseUp.bind(this);
 
 		if (this.disableTouch && this.#isTouch()) return;
 
@@ -133,7 +134,8 @@ class CustomCursor {
 	enable() {
 		if (!this.initialized) return this;
 		this.disabled = false;
-		this.DOM.element.classList.remove(this.hiddenClass);
+		// Before the first mousemove there is no position: stay hidden, the first move reveals it
+		if (this.position.x !== null) this.DOM.element.classList.remove(this.hiddenClass);
 		return this;
 	}
 
@@ -155,6 +157,7 @@ class CustomCursor {
 		document.removeEventListener('mouseenter', this.onMouseEnterHandler);
 		document.removeEventListener('mouseleave', this.onMouseLeaveHandler);
 		document.removeEventListener('mousedown', this.onMouseDownHandler);
+		document.removeEventListener('mouseup', this.onMouseUpHandler);
 
 		this.#unbindFocusElements();
 
@@ -172,7 +175,7 @@ class CustomCursor {
 	#init() {
 		if (this.initialized) return;
 
-		this.DOM.element.classList.add('cursor--initialized');
+		this.DOM.element.classList.add('cursor--initialized', this.hiddenClass);
 
 		if (this.hideTrueCursor) this.#hideCursor();
 
@@ -211,6 +214,7 @@ class CustomCursor {
 		document.addEventListener('mouseenter', this.onMouseEnterHandler);
 		document.addEventListener('mouseleave', this.onMouseLeaveHandler);
 		document.addEventListener('mousedown', this.onMouseDownHandler);
+		document.addEventListener('mouseup', this.onMouseUpHandler);
 	}
 
 	/**
@@ -218,6 +222,8 @@ class CustomCursor {
 	 */
 	#unbindFocusElements() {
 		this.focusEntries.forEach(entry => {
+			// If the pointer is over it, drop its class so it doesn't get stuck (callbacks are not re-fired)
+			if (entry.el.matches?.(':hover')) this.DOM.element.classList.remove(entry.cls);
 			entry.el.removeEventListener('mouseenter', entry.enterHandler);
 			entry.el.removeEventListener('mouseleave', entry.leaveHandler);
 		});
@@ -264,17 +270,22 @@ class CustomCursor {
 
 				el.addEventListener('mouseenter', enterHandler);
 				el.addEventListener('mouseleave', leaveHandler);
-				this.focusEntries.push({ el, enterHandler, leaveHandler });
+				this.focusEntries.push({ el, enterHandler, leaveHandler, cls: optFocusClass });
+				// Already under the pointer (re-bind after update, or bound late): apply the class now
+				if (el.matches?.(':hover')) this.DOM.element.classList.add(optFocusClass);
 			});
 		});
 	}
 
 	#onMouseMove(e) {
+		// First move: reveal the cursor (it is hidden from init until a position is known)
+		if (this.position.x === null && !this.disabled) this.DOM.element.classList.remove(this.hiddenClass);
 		this.position.x = e.clientX;
 		this.position.y = e.clientY;
 	}
 
 	#onMouseEnter() {
+		if (this.position.x === null || this.disabled) return;
 		this.DOM.element.classList.remove(this.hiddenClass);
 	}
 
@@ -284,9 +295,10 @@ class CustomCursor {
 
 	#onMouseDown() {
 		this.DOM.element.classList.add(this.clickingClass);
-		document.addEventListener('mouseup', () => {
-			this.DOM.element.classList.remove(this.clickingClass);
-		}, { once: true });
+	}
+
+	#onMouseUp() {
+		this.DOM.element.classList.remove(this.clickingClass);
 	}
 
 	#hideCursor() {
