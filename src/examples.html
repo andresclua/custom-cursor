@@ -35,6 +35,7 @@
 &lt;/div&gt;
 
 new CustomCursor({ element: '.c--cursor-a', hideTrueCursor: true });</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="setup">Copy full example</button></footer>
       </article>
       <article class="c--example-a">
         <header class="c--example-a__hd"><span class="c--example-a__hd__badge">01</span><h2 class="c--example-a__hd__title">Basic focus</h2></header>
@@ -44,6 +45,7 @@ new CustomCursor({ element: '.c--cursor-a', hideTrueCursor: true });</code></pre
   element: '.c--cursor-a',
   focusElements: ['a', 'button'], // default
 });</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="basic">Copy full example</button></footer>
       </article>
       <article class="c--example-a">
         <header class="c--example-a__hd"><span class="c--example-a__hd__badge">02</span><h2 class="c--example-a__hd__title">Custom focus class</h2></header>
@@ -52,6 +54,7 @@ new CustomCursor({ element: '.c--cursor-a', hideTrueCursor: true });</code></pre
         <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">focusElements: [
   { elements: '.js--grow', focusClass: 'c--cursor-a--third' },
 ]</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="grow">Copy full example</button></footer>
       </article>
       <article class="c--example-a">
         <header class="c--example-a__hd"><span class="c--example-a__hd__badge">03</span><h2 class="c--example-a__hd__title">Focus with callbacks</h2></header>
@@ -67,6 +70,7 @@ new CustomCursor({ element: '.c--cursor-a', hideTrueCursor: true });</code></pre
     cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
   },
 }</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="callbacks">Copy full example</button></footer>
       </article>
       <article class="c--example-a">
         <header class="c--example-a__hd"><span class="c--example-a__hd__badge">04</span><h2 class="c--example-a__hd__title">Disable / enable</h2></header>
@@ -74,18 +78,21 @@ new CustomCursor({ element: '.c--cursor-a', hideTrueCursor: true });</code></pre
         <div class="c--example-a__media-wrapper"><button class="c--btn-a" id="js--disable" type="button">disable()</button><button class="c--btn-a" id="js--enable" type="button">enable()</button></div>
         <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">cursor.disable();
 cursor.enable();</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="toggle">Copy full example</button></footer>
       </article>
       <article class="c--example-a">
         <header class="c--example-a__hd"><span class="c--example-a__hd__badge">05</span><h2 class="c--example-a__hd__title">Update options</h2></header>
         <p class="c--example-a__content">Change options without destroying the instance. Focus elements are re-bound.</p>
         <div class="c--example-a__media-wrapper"><button class="c--btn-a js--set-class" data-class="c--cursor-a--is-active" type="button">default</button><button class="c--btn-a js--set-class" data-class="c--cursor-a--third" type="button">grow</button><button class="c--btn-a js--set-class" data-class="c--cursor-a--eighth" type="button">square</button><div class="c--live-a__media-wrapper js--try">Hover me after choosing</div></div>
         <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">cursor.update({ focusClass: 'c--cursor-a--third' });</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="update">Copy full example</button></footer>
       </article>
       <article class="c--example-a">
         <header class="c--example-a__hd"><span class="c--example-a__hd__badge">06</span><h2 class="c--example-a__hd__title">Generic focus elements</h2></header>
         <p class="c--example-a__content">Any selector, NodeList or element works, not only links.</p>
         <div class="c--example-a__media-wrapper"><div class="c--card-a c--card-a--fifth js--generic">Card</div><span class="c--btn-a js--generic">Tag</span></div>
         <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">focusElements: ['a', 'button', '.js--generic']</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="generic">Copy full example</button></footer>
       </article>
       <article class="c--example-a">
         <header class="c--example-a__hd"><span class="c--example-a__hd__badge">07</span><h2 class="c--example-a__hd__title">Dynamic content</h2></header>
@@ -93,6 +100,7 @@ cursor.enable();</code></pre>
         <div class="c--example-a__media-wrapper"><button class="c--btn-a" id="js--load-more" type="button">Load more</button><div class="c--cards-a c--cards-a--second" id="js--grid"></div></div>
         <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">grid.appendChild(card);
 cursor.update({}); // new nodes are picked up</code></pre>
+        <footer class="c--example-a__ft"><button class="c--btn-a c--example-a__ft__btn js--copy-example" type="button" data-example="dynamic">Copy full example</button></footer>
       </article>
     </main>
     <script type="module" src="./js/site/main.js"></script>

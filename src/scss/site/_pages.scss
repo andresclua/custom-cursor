@@ -28,3 +28,4 @@ body[data-page='api'] .c--nav-a, body[data-page='examples'] .c--nav-a { backgrou
 .c--cards-a--second { grid-template-columns: repeat(2, 1fr); width: 100%; }
 @media (max-width: 800px) { .c--example-a { grid-template-columns: 1fr; } }
 @media (max-width: 800px) { .c--code-a { padding-top: 44px; } }
+.c--example-a__ft { grid-column: 1 / -1; }

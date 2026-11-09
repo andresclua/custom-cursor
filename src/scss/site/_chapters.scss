@@ -56,3 +56,7 @@
 .c--card-a--sixth { transition: background .25s, color .25s, transform .3s; }
 .c--card-a--sixth:hover { background: var(--ink); color: var(--bg); }
 .c--wall-a__list-group__list-item:nth-child(n+5) { align-items: flex-start; } // bottom row labels sit at the top of the cell so the state readout (bottom-right) stays clear
+
+// Hero: copy the whole cursor setup
+.c--wall-a__btn { position: absolute; z-index: 6; right: var(--gutter); top: calc(14vh + 44px); padding: 10px 18px; border: 1.5px solid currentColor; border-radius: 999px; background: transparent; color: #f4f1ea; font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; }
+@media (max-width: 800px) { .c--wall-a__btn { top: auto; bottom: 16px; left: var(--gutter); right: auto; } }

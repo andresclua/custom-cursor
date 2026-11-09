@@ -1,4 +1,6 @@
 import { cursor, setFocus, refresh, setLabel, clearLabel } from './cursor.js';
+import { copyText } from './code.js';
+import { fullExample } from './snippets.js';
 
 export function initExamples() {
 	setFocus(
@@ -15,6 +17,7 @@ export function initExamples() {
 			mouseleave: (c) => clearLabel(c),
 		},
 	);
+	document.querySelectorAll('.js--copy-example').forEach((b) => b.addEventListener('click', () => copyText(fullExample(b.dataset.example), b)));
 	if (!cursor) return;
 	document.getElementById('js--disable').addEventListener('click', () => cursor.disable());
 	document.getElementById('js--enable').addEventListener('click', () => cursor.enable());
