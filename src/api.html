@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>API — Custom Cursor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./scss/style.scss" />
+  </head>
+  <body data-page="api">
+    <nav class="c--nav-a" aria-label="Main">
+      <a class="c--nav-a__logo" href="./index.html">Custom Cursor</a>
+      <ul class="c--nav-a__list-group">
+        <li class="c--nav-a__list-group__list-item"><a class="c--nav-a__list-group__list-item__link" href="./index.html">Home</a></li>
+        <li class="c--nav-a__list-group__list-item"><a class="c--nav-a__list-group__list-item__link" href="./api.html" aria-current="page">API</a></li>
+        <li class="c--nav-a__list-group__list-item"><a class="c--nav-a__list-group__list-item__link" href="./examples.html">Examples</a></li>
+      </ul>
+    </nav>
+    <main id="main" class="c--doc-a">
+      <header class="c--doc-a__hd">
+        <p class="c--doc-a__hd__category u--mono">API</p>
+        <h1 class="c--doc-a__hd__title">Everything the cursor can do.</h1>
+        <p class="c--doc-a__hd__subtitle">The cursor on this page is a live instance. Every control below changes it right now.</p>
+      </header>
+
+      <section class="c--doc-a__item">
+        <h2 class="c--doc-a__item__title">Install</h2>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">npm install @andresclua/custom-cursor</code></pre>
+      </section>
+
+      <section class="c--doc-a__item">
+        <h2 class="c--doc-a__item__title">Quick start</h2>
+        <p class="c--doc-a__item__content">Children with <code class="c--code-b">data-lerp</code> are auto-discovered. <code class="c--code-b">1</code> is instant; lower values lag more.</p>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">&lt;div class="c--cursor-a"&gt;
+  &lt;span class="c--cursor-a__item" data-lerp="1"&gt;&lt;/span&gt;
+  &lt;span class="c--cursor-a__artwork" data-lerp="0.15"&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+import CustomCursor from '@andresclua/custom-cursor';
+
+new CustomCursor({
+  element: '.c--cursor-a',
+  hideTrueCursor: true,
+  focusElements: ['a', 'button'],
+});</code></pre>
+      </section>
+
+      <section class="c--doc-a__item">
+        <h2 class="c--doc-a__item__title">Options</h2>
+        <table class="c--table-a">
+          <thead><tr class="c--table-a__item"><th class="c--table-a__title">Option</th><th class="c--table-a__title">Default</th><th class="c--table-a__title">What it does</th></tr></thead>
+          <tbody>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">element</code></td><td class="c--table-a__content">required</td><td class="c--table-a__content">The cursor wrapper element or a selector.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">hideTrueCursor</code></td><td class="c--table-a__content"><code class="c--code-b">false</code></td><td class="c--table-a__content">Hides the native cursor.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">disableTouch</code></td><td class="c--table-a__content"><code class="c--code-b">true</code></td><td class="c--table-a__content">Does not initialize on touch devices.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">focusElements</code></td><td class="c--table-a__content"><code class="c--code-b">['a','button']</code></td><td class="c--table-a__content">Selectors or objects for hover states.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">focusClass</code></td><td class="c--table-a__content"><code class="c--code-b">c--cursor-a--is-active</code></td><td class="c--table-a__content">Default class added on focus-element hover.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">hiddenClass</code></td><td class="c--table-a__content"><code class="c--code-b">c--cursor-a--is-hidden</code></td><td class="c--table-a__content">Added when hidden, off-screen or before the first move.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">clickingClass</code></td><td class="c--table-a__content"><code class="c--code-b">c--cursor-a--second</code></td><td class="c--table-a__content">Added during mousedown.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">onInit / onDestroy / onMove</code></td><td class="c--table-a__content"><code class="c--code-b">null</code></td><td class="c--table-a__content">Callbacks: <code class="c--code-b">(cursorEl)</code>, <code class="c--code-b">(cursorEl)</code>, <code class="c--code-b">(position, cursorEl)</code>.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="c--live-a">
+          <p class="c--live-a__title u--mono">Try it live</p>
+          <label class="c--live-a__item">Follow speed <input type="range" id="js--lerp" min="0.02" max="1" step="0.01" value="0.18" /> <output id="js--lerp-out" class="u--mono">0.18</output></label>
+          <label class="c--live-a__item">focusClass
+            <select id="js--focus-class">
+              <option value="c--cursor-a--is-active">is-active (default)</option>
+              <option value="c--cursor-a--third">third (grow)</option>
+              <option value="c--cursor-a--fifth">fifth (blend)</option>
+              <option value="c--cursor-a--eighth">eighth (square)</option>
+            </select>
+          </label>
+          <label class="c--live-a__item"><input type="checkbox" id="js--hide-true" checked /> hideTrueCursor</label>
+          <div class="c--live-a__media-wrapper js--try">Hover this box to see the focus class</div>
+        </div>
+      </section>
+
+      <section class="c--doc-a__item">
+        <h2 class="c--doc-a__item__title"><code class="c--code-b">focusElements</code></h2>
+        <p class="c--doc-a__item__content">Strings are selectors. Objects add a class and callbacks.</p>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">focusElements: [
+  'a',
+  { elements: '.js--grow', focusClass: 'c--cursor-a--third' },
+  {
+    elements: '.js--text',
+    focusClass: 'c--cursor-a--fourth',
+    mouseenter(cursorEl, el) { /* ... */ },
+    mouseleave(cursorEl, el) { /* ... */ },
+  },
+]</code></pre>
+      </section>
+
+      <section class="c--doc-a__item">
+        <h2 class="c--doc-a__item__title">Methods</h2>
+        <table class="c--table-a">
+          <tbody>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">update(options)</code></td><td class="c--table-a__content">Merges options and re-binds focus elements. Call <code class="c--code-b">update({})</code> after injecting DOM.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">disable() / enable()</code></td><td class="c--table-a__content">Hides / shows the cursor.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">destroy()</code></td><td class="c--table-a__content">Removes listeners and cancels the animation frame.</td></tr>
+          </tbody>
+        </table>
+        <div class="c--live-a">
+          <p class="c--live-a__title u--mono">disable / enable</p>
+          <div class="c--live-a__ft"><button class="c--btn-a" id="js--disable" type="button">disable()</button><button class="c--btn-a" id="js--enable" type="button">enable()</button></div>
+          <p class="c--live-a__title u--mono">update({}) after injecting content</p>
+          <div class="c--live-a__ft"><button class="c--btn-a" id="js--load-more" type="button">Add a card</button></div>
+          <div class="c--cards-a" id="js--grid"></div>
+        </div>
+      </section>
+
+      <section class="c--doc-a__item">
+        <h2 class="c--doc-a__item__title">CSS classes</h2>
+        <table class="c--table-a">
+          <tbody>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">c--cursor-a--is-hidden</code></td><td class="c--table-a__content">Off-screen, disabled, or before the first move.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">c--cursor-a--is-active</code></td><td class="c--table-a__content">Hovering a focus element.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">c--cursor-a--second</code></td><td class="c--table-a__content">During mousedown.</td></tr>
+            <tr class="c--table-a__item"><td class="c--table-a__content"><code class="c--code-b">c--cursor-a--third … eighth</code></td><td class="c--table-a__content">Custom states you assign through <code class="c--code-b">focusClass</code>.</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <script type="module" src="./js/site/main.js"></script>
+  </body>
+</html>

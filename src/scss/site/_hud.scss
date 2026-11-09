@@ -1,0 +1,5 @@
+.c--hud-a { position: fixed; right: var(--gutter); bottom: 16px; z-index: 90; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; pointer-events: none; color: var(--ink); mix-blend-mode: normal; }
+.c--hud-a__category { opacity: .7; }
+.c--hud-a__title { font-size: 1rem; }
+.c--hud-a__content { opacity: .7; text-transform: none; letter-spacing: 0; }
+@media (max-width: 800px) { .c--hud-a__content { display: none; } }

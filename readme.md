@@ -2,7 +2,7 @@
 
 A lightweight JavaScript library for creating customizable animated cursors.
 
-**[Live Demo →](https://cursor.andresclua.com)**
+**[Live site →](https://cursor.andresclua.com)** · [API](https://cursor.andresclua.com/api.html) · [Examples](https://cursor.andresclua.com/examples.html)
 
 ## Installation
 
@@ -320,7 +320,7 @@ const cursor = new CustomCursor({
 
 ## CSS Classes Reference
 
-All classes are configurable via options. These are the defaults used in the demo:
+All classes are configurable via options. These are the defaults used on the site:
 
 | Class                       | When applied              |
 | --------------------------- | ------------------------- |

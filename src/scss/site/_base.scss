@@ -1,0 +1,6 @@
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: auto; }
+body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; line-height: 1.4; }
+a { color: inherit; }
+code, pre, .u--mono { font-family: var(--mono); }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }

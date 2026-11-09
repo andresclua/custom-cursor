@@ -27,10 +27,13 @@
     ],
     "scripts": {
         "dev": "vite",
+        "dev:site": "vite --config vite.config.site.js",
         "build": "vite build",
+        "build:site": "vite build --config vite.config.site.js",
         "preview": "vite preview"
     },
     "devDependencies": {
+        "gsap": "^3.15.1",
         "sass": "^1.80.6",
         "vite": "^5.4.10"
     }

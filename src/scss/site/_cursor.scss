@@ -1,0 +1,48 @@
+// Cursor: tail (long lag), artwork (ring), item (dot). Colors follow the page ink.
+.c--cursor-a {
+  position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000; color: var(--ink);
+
+  &__item, &__artwork, &__tail { position: fixed; top: 0; left: 0; pointer-events: none; border-radius: 50%; }
+  &__item { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: currentColor; transition: opacity .2s; }
+  &__artwork {
+    width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 1.5px solid currentColor;
+    display: flex; align-items: center; justify-content: center; overflow: hidden; font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .04em;
+    transition: width .3s cubic-bezier(.2,.8,.2,1), height .3s cubic-bezier(.2,.8,.2,1), margin .3s cubic-bezier(.2,.8,.2,1), background .25s, border-radius .3s, opacity .2s, color .2s;
+  }
+  &__tail { width: 120px; height: 120px; margin: -60px 0 0 -60px; background: currentColor; opacity: 0; transition: opacity .3s; }
+
+  &--is-hidden { .c--cursor-a__item, .c--cursor-a__artwork, .c--cursor-a__overlay { opacity: 0; } }
+  // focus
+  &--is-active { .c--cursor-a__artwork { width: 72px; height: 72px; margin: -36px 0 0 -36px; background: color-mix(in srgb, currentColor 14%, transparent); } .c--cursor-a__item { opacity: 0; } }
+  // mousedown
+  &--second .c--cursor-a__artwork { width: 28px; height: 28px; margin: -14px 0 0 -14px; }
+  // grow
+  &--third .c--cursor-a__artwork { width: 120px; height: 120px; margin: -60px 0 0 -60px; background: color-mix(in srgb, currentColor 38%, transparent); }
+  &--third .c--cursor-a__item { opacity: 0; }
+  // text
+  &--fourth .c--cursor-a__artwork { width: 104px; height: 104px; margin: -52px 0 0 -52px; background: var(--ink); color: var(--bg); border-color: var(--bg); box-shadow: 0 0 0 2px var(--ink); font-size: 14px; }
+  &--fourth .c--cursor-a__item { opacity: 0; }
+  // blend
+  &--fifth { mix-blend-mode: difference; color: #fff; }
+  &--fifth .c--cursor-a__artwork { width: 140px; height: 140px; margin: -70px 0 0 -70px; background: #fff; }
+  &--fifth .c--cursor-a__item { opacity: 0; }
+  // label (pill)
+  &--sixth .c--cursor-a__artwork { width: 120px; height: 40px; margin: -20px 0 0 -60px; border-radius: 20px; background: var(--ink); color: var(--bg); border-color: var(--bg); box-shadow: 0 0 0 2px var(--ink); font-size: 14px; }
+  &--sixth .c--cursor-a__item { opacity: 0; }
+  // trail
+  &--seventh .c--cursor-a__overlay { opacity: .22; }
+  // square (the wall's "more")
+  &--eighth .c--cursor-a__artwork { border-radius: 4px; width: 56px; height: 56px; margin: -28px 0 0 -28px; transform-origin: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c--cursor-a__artwork, .c--cursor-a__overlay, .c--cursor-a__item { transition: none; }
+}
+
+// wall-only states
+.c--cursor-a--ninth .c--cursor-a__artwork { opacity: 0; }
+.c--cursor-a--ninth .c--cursor-a__item { width: 20px; height: 20px; margin: -10px 0 0 -10px; }
+.c--cursor-a--tenth .c--cursor-a__item { opacity: 0; }
+.c--cursor-a--tenth .c--cursor-a__artwork { width: 80px; height: 80px; margin: -40px 0 0 -40px; border-width: 3px; }
+
+.c--cursor-a__title { display: block; white-space: nowrap; }

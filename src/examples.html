@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>Examples — Custom Cursor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./scss/style.scss" />
+  </head>
+  <body data-page="examples">
+    <nav class="c--nav-a" aria-label="Main">
+      <a class="c--nav-a__logo" href="./index.html">Custom Cursor</a>
+      <ul class="c--nav-a__list-group">
+        <li class="c--nav-a__list-group__list-item"><a class="c--nav-a__list-group__list-item__link" href="./index.html">Home</a></li>
+        <li class="c--nav-a__list-group__list-item"><a class="c--nav-a__list-group__list-item__link" href="./api.html">API</a></li>
+        <li class="c--nav-a__list-group__list-item"><a class="c--nav-a__list-group__list-item__link" href="./examples.html" aria-current="page">Examples</a></li>
+      </ul>
+    </nav>
+    <main id="main" class="c--doc-a">
+      <header class="c--doc-a__hd">
+        <p class="c--doc-a__hd__category u--mono">Examples</p>
+        <h1 class="c--doc-a__hd__title">Eight small recipes.</h1>
+        <p class="c--doc-a__hd__subtitle">Every stage is live: the cursor you are moving is the one in the code.</p>
+      </header>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">00</span><h2 class="c--example-a__hd__title">Setup</h2></header>
+        <p class="c--example-a__content">The wrapper holds children with <code class="c--code-b">data-lerp</code>. This page's cursor is exactly this setup: an instant dot and a lagging ring.</p>
+        <div class="c--example-a__media-wrapper"><p class="u--mono">Move the pointer: dot = lerp 1, ring = lerp 0.18.</p></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">&lt;div class="c--cursor-a"&gt;
+  &lt;span class="c--cursor-a__artwork" data-lerp="0.18"&gt;&lt;/span&gt;
+  &lt;span class="c--cursor-a__item" data-lerp="1"&gt;&lt;/span&gt;
+&lt;/div&gt;
+
+new CustomCursor({ element: '.c--cursor-a', hideTrueCursor: true });</code></pre>
+      </article>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">01</span><h2 class="c--example-a__hd__title">Basic focus</h2></header>
+        <p class="c--example-a__content">Links and buttons grow the ring by default. No config needed.</p>
+        <div class="c--example-a__media-wrapper"><a class="c--btn-a" href="#basic">A link</a><button class="c--btn-a" type="button">A button</button></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">new CustomCursor({
+  element: '.c--cursor-a',
+  focusElements: ['a', 'button'], // default
+});</code></pre>
+      </article>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">02</span><h2 class="c--example-a__hd__title">Custom focus class</h2></header>
+        <p class="c--example-a__content">Give a group of elements its own class and the cursor can look completely different over them.</p>
+        <div class="c--example-a__media-wrapper"><div class="c--card-a c--card-a--fifth js--grow">Grow</div><div class="c--card-a c--card-a--fifth js--grow">Grow</div></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">focusElements: [
+  { elements: '.js--grow', focusClass: 'c--cursor-a--third' },
+]</code></pre>
+      </article>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">03</span><h2 class="c--example-a__hd__title">Focus with callbacks</h2></header>
+        <p class="c--example-a__content"><code class="c--code-b">mouseenter</code> and <code class="c--code-b">mouseleave</code> receive the cursor and the hovered element: write text, animate, anything.</p>
+        <div class="c--example-a__media-wrapper"><div class="c--cards-a c--cards-a--second"><div class="c--card-a c--card-a--fifth js--text" data-cursor-text="View">One</div><div class="c--card-a c--card-a--fifth js--text" data-cursor-text="Play">Two</div></div></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">{
+  elements: '.js--text',
+  focusClass: 'c--cursor-a--fourth',
+  mouseenter(cursorEl, el) {
+    cursorEl.querySelector('.c--cursor-a__artwork').textContent = el.dataset.cursorText;
+  },
+  mouseleave(cursorEl) {
+    cursorEl.querySelector('.c--cursor-a__artwork').textContent = '';
+  },
+}</code></pre>
+      </article>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">04</span><h2 class="c--example-a__hd__title">Disable / enable</h2></header>
+        <p class="c--example-a__content">Hide the cursor on demand, for instance over an embedded player.</p>
+        <div class="c--example-a__media-wrapper"><button class="c--btn-a" id="js--disable" type="button">disable()</button><button class="c--btn-a" id="js--enable" type="button">enable()</button></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">cursor.disable();
+cursor.enable();</code></pre>
+      </article>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">05</span><h2 class="c--example-a__hd__title">Update options</h2></header>
+        <p class="c--example-a__content">Change options without destroying the instance. Focus elements are re-bound.</p>
+        <div class="c--example-a__media-wrapper"><button class="c--btn-a js--set-class" data-class="c--cursor-a--is-active" type="button">default</button><button class="c--btn-a js--set-class" data-class="c--cursor-a--third" type="button">grow</button><button class="c--btn-a js--set-class" data-class="c--cursor-a--eighth" type="button">square</button><div class="c--live-a__media-wrapper js--try">Hover me after choosing</div></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">cursor.update({ focusClass: 'c--cursor-a--third' });</code></pre>
+      </article>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">06</span><h2 class="c--example-a__hd__title">Generic focus elements</h2></header>
+        <p class="c--example-a__content">Any selector, NodeList or element works, not only links.</p>
+        <div class="c--example-a__media-wrapper"><div class="c--card-a c--card-a--fifth js--generic">Card</div><span class="c--btn-a js--generic">Tag</span></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">focusElements: ['a', 'button', '.js--generic']</code></pre>
+      </article>
+      <article class="c--example-a">
+        <header class="c--example-a__hd"><span class="c--example-a__hd__badge">07</span><h2 class="c--example-a__hd__title">Dynamic content</h2></header>
+        <p class="c--example-a__content">After injecting DOM (AJAX, load more), call <code class="c--code-b">update({})</code> so selectors are re-evaluated.</p>
+        <div class="c--example-a__media-wrapper"><button class="c--btn-a" id="js--load-more" type="button">Load more</button><div class="c--cards-a c--cards-a--second" id="js--grid"></div></div>
+        <pre class="c--code-a"><button class="c--code-a__btn js--code-copy" type="button">Copy</button><code class="c--code-a__content">grid.appendChild(card);
+cursor.update({}); // new nodes are picked up</code></pre>
+      </article>
+    </main>
+    <script type="module" src="./js/site/main.js"></script>
+  </body>
+</html>

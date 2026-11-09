@@ -1,0 +1,58 @@
+.c--chapter-a { position: relative; min-height: 100vh; padding: 14vh var(--gutter) 10vh; display: flex; flex-direction: column; justify-content: center; gap: 24px; }
+.c--chapter-a__category { margin: 0; text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; }
+.c--chapter-a__title { margin: 0; max-width: 14ch; font-size: var(--fs-xl); line-height: .92; letter-spacing: -.03em; font-weight: 700; }
+.c--chapter-a__content { margin: 0; max-width: 52ch; font-size: var(--fs-lg); }
+.u--word { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .04em .16em; margin-bottom: -.16em; }
+.u--word > span { display: inline-block; }
+
+// Chapter 0: wall of states
+.c--wall-a { padding: 0; gap: 0; }
+.c--wall-a__list-group { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 50vh); }
+.c--wall-a__list-group__list-item { display: flex; align-items: flex-end; padding: 16px; font: 500 .85rem var(--mono); text-transform: uppercase; letter-spacing: .08em; color: #f4f1ea; }
+// All zones keep >= 4.9:1 against the cream ink, so cursor, nav and labels stay visible.
+.c--wall-a__list-group__list-item:nth-child(1) { background: #1a1a1d; } .c--wall-a__list-group__list-item:nth-child(2) { background: #0b6e4f; }
+.c--wall-a__list-group__list-item:nth-child(3) { background: #3a1c71; } .c--wall-a__list-group__list-item:nth-child(4) { background: #c2300f; }
+.c--wall-a__list-group__list-item:nth-child(5) { background: #5b3cff; } .c--wall-a__list-group__list-item:nth-child(6) { background: #0057ff; }
+.c--wall-a__list-group__list-item:nth-child(7) { background: #111111; } .c--wall-a__list-group__list-item:nth-child(8) { background: #8a1c5c; }
+.c--wall-a__title { position: absolute; z-index: 5; left: var(--gutter); top: 14vh; margin: 0; font-size: var(--fs-xl); line-height: .92; letter-spacing: -.03em; pointer-events: none; mix-blend-mode: difference; color: #fff; }
+.c--wall-a__content { position: absolute; z-index: 5; right: var(--gutter); top: 14vh; margin: 0; pointer-events: none; color: #f4f1ea; }
+@media (hover: none) { .c--wall-a__content { display: none; } }
+@media (max-width: 800px) { .c--wall-a__list-group { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 25vh); } .c--wall-a__title { top: 9vh; font-size: 2.6rem; } .c--wall-a__content { display: none; } }
+
+// Chapter 1: lerp pad
+.c--pad-a { min-height: 38vh; border: 1.5px dashed currentColor; border-radius: 12px; padding: 24px; display: flex; align-items: flex-end; }
+.c--range-a { display: flex; gap: 16px; align-items: center; font: 500 .9rem var(--mono); text-transform: uppercase; }
+.c--range-a__item { width: min(40vw, 320px); accent-color: currentColor; }
+
+// Cards (chapters 2-3)
+.c--cards-a { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.c--card-a { display: flex; align-items: flex-end; min-height: 220px; padding: 20px; border: 1.5px solid currentColor; border-radius: 12px; background: transparent; color: inherit; font: 500 1.4rem var(--font); text-decoration: none; text-align: left; }
+@media (max-width: 800px) { .c--cards-a { grid-template-columns: 1fr; } }
+
+// Chapter 4: magnets
+.c--magnet-a { display: flex; flex-wrap: wrap; gap: 32px; padding: 24px 0; }
+.c--magnet-a__btn { padding: 28px 48px; border: 1.5px solid currentColor; border-radius: 999px; background: transparent; color: inherit; font: 700 1.3rem var(--font); }
+
+// Chapter 5: blend
+.c--blend-a { min-height: 50vh; display: grid; place-items: center; background: #fff; color: #0b0b0c; border-radius: 12px; }
+.c--blend-a__title { margin: 0; font-size: clamp(3rem, 14vw, 12rem); font-weight: 700; letter-spacing: -.04em; }
+
+// Chapter 6: final
+.c--install-a { align-self: flex-start; padding: 18px 24px; border: 1.5px solid currentColor; border-radius: 999px; background: transparent; color: inherit; font-size: 1rem; }
+.c--install-a--is-active { background: currentColor; color: var(--bg); }
+.c--link-a { display: flex; gap: 24px; font-size: var(--fs-lg); margin: 0; }
+
+// Chapter 3: tall cards with something to look at
+.c--card-a--second, .c--card-a--third, .c--card-a--fourth { min-height: 340px; flex-direction: column; align-items: flex-start; justify-content: space-between; }
+.c--card-a__badge { font-size: .8rem; letter-spacing: .1em; }
+.c--card-a__artwork { font-size: clamp(4rem, 9vw, 8rem); font-weight: 700; letter-spacing: -.05em; line-height: 1; display: inline-block; }
+.c--card-a--second { background: #0b0b0c; color: #ff5a36; border-color: #0b0b0c; }
+.c--card-a--third { background: #f4f1ea; color: #0b0b0c; border-color: #f4f1ea; }
+.c--card-a--fourth { background: #d7ff3a; color: #0b0b0c; border-color: #d7ff3a; }
+
+// Chapter 2: the cards answer too, so the change is visible on the page and not only in the cursor
+// --fifth: compact. --sixth: inverts on hover so the change is visible on the page and not only in the cursor.
+.c--card-a--fifth { min-height: 90px; font-size: 1rem; }
+.c--card-a--sixth { transition: background .25s, color .25s, transform .3s; }
+.c--card-a--sixth:hover { background: var(--ink); color: var(--bg); }
+.c--wall-a__list-group__list-item:nth-child(n+5) { align-items: flex-start; } // bottom row labels sit at the top of the cell so the state readout (bottom-right) stays clear

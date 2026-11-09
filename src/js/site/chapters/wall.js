@@ -1,0 +1,17 @@
+import { setFocus, setLabel, clearLabel, startCoords, stopCoords } from '../cursor.js';
+
+// zone data-state → [focus class suffix, optional text shown in the ring]
+const STATES = {
+	dot: ['ninth'], ring: ['tenth'], blend: ['fifth'], text: ['fourth', 'View'],
+	trail: ['seventh'], grow: ['third'], label: ['sixth', '@coords'], more: ['eighth'],
+};
+
+export function initWall() {
+	const entries = Object.entries(STATES).map(([state, [cls, text]]) => ({
+		elements: `.js--zone[data-state="${state}"]`,
+		focusClass: `c--cursor-a--${cls}`,
+		mouseenter: (c) => { if (text === '@coords') startCoords(c); else if (text) setLabel(c, text); },
+		mouseleave: (c) => { if (text === '@coords') stopCoords(c); else clearLabel(c); },
+	}));
+	setFocus(...entries);
+}
